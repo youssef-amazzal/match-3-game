@@ -1,0 +1,522 @@
+[
+  {
+    "spritesheet": "ui_1",
+    "sprites": [
+      {
+        "type": "GemSlot",
+        "baseId": 0,
+        "width": 3,
+        "height": 3,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,1,0],
+              [0,1,0],
+              [0,1,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0],
+              [1,1,1],
+              [0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "idle",
+            "frames": [0]
+          }
+        ],
+        "variants": [
+          {
+            "type": "State",
+            "values": [
+              {"name": "open", "idStep": 0},
+              {"name": "closed", "idStep": 3}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Button",
+        "baseId": 368,
+        "width": 3,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,1,0],
+              [0,1,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0],
+              [0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [120]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Color",
+            "values": [
+              {"name": "green", "idStep": 0},
+              {"name": "red", "idStep": 300}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IconButton",
+        "baseId": 16,
+        "width": 2,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0],
+              [0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0],
+              [0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [2]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Icon",
+            "values": [
+              {"name": "zero",  "idStep": 0},
+              {"name": "right", "idStep": 4},
+              {"name": "left", "idStep": 8},
+              {"name": "down", "idStep": 12},
+              {"name": "up", "idStep": 16},
+              {"name": "question", "idStep": 120},
+              {"name": "leaderboard", "idStep": 124},
+              {"name": "money", "idStep": 128},
+              {"name": "stats", "idStep": 132},
+              {"name": "settings", "idStep": 136},
+              {"name": "one", "idStep": 240},
+              {"name": "two", "idStep": 244},
+              {"name": "three", "idStep": 248},
+              {"name": "achievement", "idStep": 252},
+              {"name": "shop", "idStep": 256},
+              {"name": "four", "idStep": 360},
+              {"name": "five", "idStep": 364},
+              {"name": "six", "idStep": 368},
+              {"name": "volume_on", "idStep": 372},
+              {"name": "volume_off", "idStep": 376},
+              {"name": "seven", "idStep": 480},
+              {"name": "eight", "idStep": 484},
+              {"name": "nine", "idStep": 488},
+              {"name": "exchange", "idStep": 492},
+              {"name": "delete", "idStep": 496},
+              {"name": "star", "idStep": 600},
+              {"name": "lightning", "idStep": 604},
+              {"name": "heart", "idStep": 608},
+              {"name": "pause", "idStep": 612},
+              {"name": "exclamation", "idStep": 616},
+              {"name": "image", "idStep": 720},
+              {"name": "video", "idStep": 724},
+              {"name": "cross", "idStep": 728},
+              {"name": "check", "idStep": 732},
+              {"name": "home", "idStep": 736},
+              {"name": "music_off", "idStep": 840},
+              {"name": "unknown_1", "idStep": 844},
+              {"name": "unknown_2", "idStep": 848},
+              {"name": "reload", "idStep": 852},
+              {"name": "camera", "idStep": 856},
+              {"name": "resume", "idStep": 960},
+              {"name": "mail", "idStep": 964},
+              {"name": "restart", "idStep": 968},
+              {"name": "gift", "idStep": 972},
+              {"name": "music_on", "idStep": 976},
+              {"name": "speed_up", "idStep": 1080},
+              {"name": "plus", "idStep": 1084},
+              {"name": "minus", "idStep": 1088},
+              {"name": "lock", "idStep": 1092},
+              {"name": "undo", "idStep": 1096}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TextButton4",
+        "baseId": 1084,
+        "width": 4,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0,0,0],
+              [0,0,0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0,0],
+              [0,0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "hover",
+            "frames": [-4]
+          },
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [4]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Text",
+            "values": [
+              {"name": "Rate", "idStep": 0
+  
+  },
+              {"name": "Shop", "idStep": 120},
+              {"name": "Yes", "idStep": 132},
+              {"name": "Start", "idStep": 144},
+              {"name": "Save", "idStep": 240},
+              {"name": "No", "idStep": 252},
+              {"name": "Menu", "idStep": 264},
+              {"name": "Load", "idStep": 360},
+              {"name": "Buy", "idStep": 372},
+              {"name": "Play", "idStep": 384},
+              {"name": "Back", "idStep": 480},
+              {"name": "Get", "idStep": 492},
+              {"name": "Sell", "idStep": 504},
+              {"name": "Bonus", "idStep": 516},
+              {"name": "Close", "idStep": 528},
+              {"name": "Next", "idStep": 624},
+              {"name": "New", "idStep": 636},
+              {"name": "Quit", "idStep": 648},
+              {"name": "More", "idStep": 660},
+              {"name": "Mute", "idStep": 672}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TextButton5",
+        "baseId": 44,
+        "width": 5,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0,0,0,0],
+              [0,0,0,0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0,0,0],
+              [0,0,0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "hover",
+            "frames": [-8]
+          },
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [8]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Text",
+            "values": [
+              {"name": "credits", "idStep": 0},
+              {"name": "restart", "idStep": 120},
+              {"name": "option", "idStep": 240},
+              {"name": "cancel", "idStep": 360}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TextButton6",
+        "baseId": 524,
+        "width": 6,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0,0,0,0,0],
+              [0,0,0,0,0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0,0,0,0],
+              [0,0,0,0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "hover",
+            "frames": [-8]
+          },
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [8]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Text",
+            "values": [
+              {"name": "mainmenu", "idStep": 0},
+              {"name": "gameover", "idStep": 120},
+              {"name": "continue", "idStep": 240}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TextButton7",
+        "baseId": 884,
+        "width": 7,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "hover",
+            "frames": [-8]
+          },
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [8]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Text",
+            "values": [
+              {"name": "collection", "idStep": 0},
+              {"name": "inventory", "idStep": 120},
+              {"name": "equipment", "idStep": 240},
+              {"name": "completed", "idStep": 360}
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TextButton8",
+        "baseId": 1364,
+        "width": 8,
+        "height": 2,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0]
+            ]
+          },
+          {
+            "type": "vertical",
+            "value": [
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0]
+            ]
+          }
+        ],
+        "animations": [
+          {
+            "type": "hover",
+            "frames": [-8]
+          },
+          {
+            "type": "idle",
+            "frames": [0]
+          },
+          {
+            "type": "pressed",
+            "frames": [8]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Text",
+            "values": [
+              {"name": "achievement", "idStep": 0},
+              {"name": "leaderboard", "idStep": 120}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "spritesheet": "gems",
+    "sprites": [
+      {
+        "type": "Gem",
+        "baseId": 0,
+        "width": 1,
+        "height": 1,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [[0]]
+          },
+          {
+            "type": "vertical",
+            "value": [[0]]
+          }
+        ],
+        "animations": [
+          {
+            "type": "idle",
+            "frames": [0]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Color",
+            "values": [
+              {"name": "gray", "idStep": 0},
+              {"name": "blue", "idStep": 1},
+              {"name": "green", "idStep": 2},
+              {"name": "cyan", "idStep": 3},
+              {"name": "orange", "idStep": 4},
+              {"name": "pink", "idStep": 5},
+              {"name": "purple", "idStep": 6},
+              {"name": "red", "idStep": 7},
+              {"name": "white", "idStep": 8},
+              {"name": "yellow", "idStep": 9}
+            ]
+          },
+          {
+            "type": "Shape",
+            "values": [
+              {"name": "diamond", "idStep": 0},
+              {"name": "rhombus", "idStep": 10},
+              {"name": "hearth", "idStep": 20},
+              {"name": "oval", "idStep": 30},
+              {"name": "round", "idStep": 40},
+              {"name": "square", "idStep": 50},
+              {"name": "kite", "idStep": 60},
+              {"name": "long_hex", "idStep": 70},
+              {"name": "triangle", "idStep": 80},
+              {"name": "hex", "idStep": 90}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "spritesheet": "bg_patterns",
+    "sprites": [
+      {
+        "type": "pattern",
+        "baseId": 0,
+        "width": 1,
+        "height": 1,
+        "expansions": [
+          {
+            "type": "horizontal",
+            "value": [[0]]
+          },
+          {
+            "type": "vertical",
+            "value": [[0]]
+          }
+        ],
+        "animations": [
+          {
+            "type": "idle",
+            "frames": [0]
+          }
+        ],
+        "variants": [
+          {
+            "type": "Color",
+            "values": [
+              {"name": "green", "idStep": 0},
+              {"name": "blue", "idStep": 15},
+              {"name": "pink", "idStep": 3}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
