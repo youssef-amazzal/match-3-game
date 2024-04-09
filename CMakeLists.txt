@@ -55,9 +55,11 @@ add_executable(${PROJECT_NAME} main.cpp
         src/headers/constants.h
         src/headers/libs.h
         src/headers/Header.h
-        src/utils/FileManager.cpp
         src/utils/ResourceManager.cpp
         src/headers/components.h
+        src/Game.cpp
+        src/Game.h
+        src/Render/Render.h
 
 )
 #set(raylib_VERBOSE 1)

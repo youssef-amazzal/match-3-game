@@ -4,8 +4,8 @@
         "type": "gems",
         "rows": 10,
         "columns": 10,
-        "frameWidth": 16,
-        "frameHeight": 16,
+        "tileWidth": 16,
+        "tileHeight": 16,
         "scale": 1,
         "layer": 3
     },
@@ -14,8 +14,8 @@
         "type": "ui_1",
         "rows": 30,
         "columns": 60,
-        "frameWidth": 16,
-        "frameHeight": 16,
+        "tileWidth": 16,
+        "tileHeight": 16,
         "scale": 1,
         "layer": 2
     },
@@ -24,8 +24,8 @@
         "type": "ui_2",
         "rows": 19,
         "columns": 57,
-        "frameWidth": 16,
-        "frameHeight": 16,
+        "tileWidth": 16,
+        "tileHeight": 16,
         "scale": 1,
         "layer": 2
     },
@@ -34,8 +34,8 @@
         "type": "bg_patterns",
         "rows": 7,
         "columns": 13,
-        "frameWidth": 64,
-        "frameHeight": 64,
+        "tileWidth": 64,
+        "tileHeight": 64,
         "scale": 0.25,
         "layer": 1
     }

@@ -1,12 +1,8 @@
-#include "src/headers/Header.h"
+#include "src/Game.h"
 
 int main() {
-    auto world = flecs::world();
-
-    auto hero = world.entity();
-
-    hero.set(Position{4, 5});
-
-    
+    Game::init();
+    Game::run();
+    Game::exit();
     return 0;
 }

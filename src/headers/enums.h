@@ -27,14 +27,14 @@ NLOHMANN_JSON_SERIALIZE_ENUM(SCENES, {
 
 
 
-enum SPRITES {
+enum SPRITES_SHEETS {
     SP_INVALID,
     SP_GEMS,
     SP_UI_1,
     SP_UI_2,
     SP_BG_PATTERNS,
 };
-NLOHMANN_JSON_SERIALIZE_ENUM(SPRITES, {
+NLOHMANN_JSON_SERIALIZE_ENUM(SPRITES_SHEETS, {
 {SP_INVALID      ,nullptr},
 {SP_GEMS         ,"gems"},
 {SP_UI_1         ,"ui_1"},
@@ -54,18 +54,21 @@ enum UI_ELEMENTS {
 
     UI_GEM_SLOT,
     UI_GEM,
+
+    UI_BG_PATTERN
 };
 NLOHMANN_JSON_SERIALIZE_ENUM(UI_ELEMENTS, {
-{UI_INVALID          ,nullptr},
-{UI_BUTTON           ,"Button"},
-{UI_ICON_BUTTON      ,"IconButton"},
-{UI_TEXT_BUTTON_4    ,"TextButton4"},
-{UI_TEXT_BUTTON_5    ,"TextButton5"},
-{UI_TEXT_BUTTON_6    ,"TextButton6"},
-{UI_TEXT_BUTTON_7    ,"TextButton7"},
-{UI_TEXT_BUTTON_8    ,"TextButton8"},
-{UI_GEM_SLOT         ,"GemSlot"},
-{UI_GEM              ,"Gem"},
+    {UI_INVALID          ,nullptr},
+    {UI_BUTTON           ,"Button"},
+    {UI_ICON_BUTTON      ,"IconButton"},
+    {UI_TEXT_BUTTON_4    ,"TextButton4"},
+    {UI_TEXT_BUTTON_5    ,"TextButton5"},
+    {UI_TEXT_BUTTON_6    ,"TextButton6"},
+    {UI_TEXT_BUTTON_7    ,"TextButton7"},
+    {UI_TEXT_BUTTON_8    ,"TextButton8"},
+    {UI_GEM_SLOT         ,"GemSlot"},
+    {UI_GEM              ,"Gem"},
+    {UI_BG_PATTERN, "BgPattern"}
 })
 
 enum UI_ANIMATIONS {

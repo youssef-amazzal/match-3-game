@@ -7,12 +7,14 @@
 
 # define JSON_DIAGNOSTICS 1
 #include "nlohmann/json.hpp"
-
 using json = nlohmann::json;
 
 // C++ includes
-//#include <memory>
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <vector>
+
+#include <filesystem>
+namespace   FileSys = std::filesystem;
+using       Path    = FileSys::path;

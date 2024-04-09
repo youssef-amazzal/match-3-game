@@ -486,7 +486,7 @@
     "spritesheet": "bg_patterns",
     "sprites": [
       {
-        "type": "pattern",
+        "type": "BgPattern",
         "baseId": 0,
         "width": 1,
         "height": 1,

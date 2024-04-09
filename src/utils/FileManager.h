@@ -1,8 +1,5 @@
-#include <filesystem>
-#include "../headers/Header.h"
 
-namespace   FileSys = std::filesystem;
-using       Path    = FileSys::path;
+#include "../headers/Header.h"
 
 class FileManager
 {
@@ -10,10 +7,26 @@ private:
     FileManager() = default;
 
 public:
-    static const Path ROOT_PATH;
-    static const Path ASSETS_PATH;
-    static const Path SPRITES_PATH;
-    static const Path AUDIO_PATH;
 
-    static nlohmann::json parseJson(const std::string& path, const Path& basePath = FileManager::ROOT_PATH);
+    static nlohmann::json parseJson(const Path& filePath) {
+        std::ifstream file(filePath);
+
+        if (!file.is_open()) {
+            std::cerr << "Unable to open file: " << filePath << std::endl;
+            return {};
+        }
+
+        try {
+            nlohmann::json parsed = nlohmann::json::parse(file);
+            return parsed;
+        } catch (nlohmann::json::parse_error& e) {
+            std::cerr << "JSON parse error: " << e.what() << std::endl;
+            return {};
+        }
+    }
+
+    static nlohmann::json parseJson(const std::string& path, const Path& basePath = ROOT_PATH) {
+        Path filePath = basePath / path;
+        return parseJson(filePath);
+    }
 };
