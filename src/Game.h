@@ -1,10 +1,12 @@
 #pragma once
 #include "headers/Header.h"
 #include "utils/ResourceManager.h"
+#include "Scenes/Screen.h"
 
 
 class Game {
 private:
+    static Screen* screen;
 public:
     Game() = default;
     ~Game() = default;
@@ -16,9 +18,6 @@ public:
         // WARNING: If you try to load textures before creating the window, you will face a segmentation fault
         // without any further explanation.
 
-
-
-
     }
     static void run() {
 
@@ -27,6 +26,11 @@ public:
 
                 ClearBackground(RAYWHITE);
 
+                Screen* newScreen = screen->play();
+
+                if (newScreen != nullptr) {
+                    screen = newScreen;
+                }
 
 
             EndDrawing();
