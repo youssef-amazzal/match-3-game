@@ -7,10 +7,7 @@ public:
     // declared public just so that I can use std::make_unique<MainMenu>()
     MainMenu() : Screen() {}
 
-    static Screen* getInstance() {
-        static std::unique_ptr<Screen> instance = std::make_unique<MainMenu>();
-        return instance.get();
-    }
+
 
 private:;
 

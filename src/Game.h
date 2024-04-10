@@ -3,7 +3,6 @@
 #include "utils/ResourceManager.h"
 #include "Scenes/Screen.h"
 
-
 class Game {
 private:
     static Screen* screen;
@@ -19,6 +18,7 @@ public:
         // without any further explanation.
 
     }
+
     static void run() {
 
         while (!WindowShouldClose()) {
@@ -27,7 +27,6 @@ public:
                 ClearBackground(RAYWHITE);
 
                 Screen* newScreen = screen->play();
-
                 if (newScreen != nullptr) {
                     screen = newScreen;
                 }

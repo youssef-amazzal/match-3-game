@@ -5,7 +5,7 @@ Screen* MainMenu::update() {
     DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
 
     if (IsKeyPressed(KEY_SPACE)) {
-    return GameMode::getInstance();
+    return Screen::getInstance<GameMode>();
     }
 
     return nullptr;

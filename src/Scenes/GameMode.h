@@ -8,14 +8,7 @@ class GameMode : public Screen {
 public:
     GameMode() : Screen() {};
 
-    static Screen* getInstance() {
-        static std::unique_ptr<Screen> instance = std::make_unique<GameMode>();
-        return instance.get();
-    }
-
 private:
-
-
     void enter() override {
         std::cout << "Enter Game mode Screen" << "\n";
     }
