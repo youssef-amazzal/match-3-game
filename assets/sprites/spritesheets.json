@@ -6,7 +6,7 @@
         "columns": 10,
         "tileWidth": 16,
         "tileHeight": 16,
-        "scale": 1,
+        "scale": 2.5,
         "layer": 3
     },
     {
@@ -16,7 +16,7 @@
         "columns": 60,
         "tileWidth": 16,
         "tileHeight": 16,
-        "scale": 1,
+        "scale": 1.5,
         "layer": 2
     },
     {
@@ -26,7 +26,7 @@
         "columns": 57,
         "tileWidth": 16,
         "tileHeight": 16,
-        "scale": 1,
+        "scale": 2,
         "layer": 2
     },
     {

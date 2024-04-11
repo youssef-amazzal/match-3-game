@@ -1,7 +1,7 @@
 #pragma once
 
-#define SCREEN_WIDTH    960
-#define SCREEN_HEIGHT   480
+#define SCREEN_WIDTH    1200
+#define SCREEN_HEIGHT   750
 #define FRAME_RATE      60
 #define TILE_SIZE       16
 #define UI_SCALE        1

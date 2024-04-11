@@ -64,6 +64,7 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Scenes/GameMode.h
         src/Scenes/GameMode.cpp
         src/Scenes/MainMenu.cpp
+        src/core/TransformModule.h
 
 )
 #set(raylib_VERBOSE 1)

@@ -123,7 +123,7 @@ enum VARIANTS {
     // SHAPES
     SH_INVALID,
     SH_DIAMOND,      SH_RHOMBUS,
-    SH_HEARTH,       SH_OVAL,
+    SH_HEART,       SH_OVAL,
     SH_ROUND,        SH_SQUARE,
     SH_KITE,         SH_LONG_HEX,
     SH_TRIANGLE,     SH_HEX,
@@ -199,7 +199,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(VARIANTS, {
 // SHAPES
 {SH_INVALID ,nullptr},
 {SH_DIAMOND ,"diamond"},      {SH_RHOMBUS ,"rhombus"},
-{SH_HEARTH  ,"hearth"},       {SH_OVAL    ,"oval"},
+{SH_HEART  ,"hearth"},       {SH_OVAL    ,"oval"},
 {SH_ROUND   ,"round"},        {SH_SQUARE  ,"square"},
 {SH_KITE    ,"kite"},         {SH_LONG_HEX,"long_hex"},
 {SH_TRIANGLE,"triangle"},     {SH_HEX     ,"hex"},

@@ -2,26 +2,40 @@
 #include "GameMode.h"
 #include "../Game.h"
 #include "../core/RenderModule.h"
+#include "../core/TransformModule.h"
 
 void MainMenu::enter() {
     std::cout << "Enter Main menu Scene" << "\n";
 
     auto& ecs = Game::ecs;
     ecs.import<RenderModule>();
+    ecs.import<TransformModule>();
+
     sceneEntity = new flecs::entity;
     *sceneEntity = ecs.entity();
 
     auto prev = ecs.set_scope(*sceneEntity);
 
-    auto UiElement = ecs.entity()
-            .set<RenderModule::Type>      ({UI_ELEMENTS::UI_BUTTON, 0})
-            .add<RenderModule::Sprite>    ()
-            .set<RenderModule::Variants>  ({.values = {C_RED}})
-            .add<RenderModule::Expand>    ()
-            .add<RenderModule::Animation> ();
+
+    auto Slot = ecs.entity("Gem Slot")
+            .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+            .add<RenderModule::Expand>     ()
+            .add<RenderModule::Animation>  ()
+            .set<TransformModule::Position, TransformModule::World>({100, 100});
+
+    auto Gem = ecs.entity("Gem")
+            .child_of(Slot)
+
+            .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
+            .add<RenderModule::Expand>     ()
+            .add<RenderModule::Animation>  ()
+
+            .add<TransformModule::Position>()
+            .add<TransformModule::Position, TransformModule::World>()
+            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
 
     ecs.set_scope(prev);
-    RenderModule::init(ecs);
+
 }
 
 Scene* MainMenu::update() {
