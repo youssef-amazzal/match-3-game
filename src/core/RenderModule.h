@@ -13,7 +13,10 @@ struct RenderModule {
         world.component<Variants>   ("Variants");
         world.component<Type>       ("Type");
 
+
         world.observer<Type>().event(flecs::OnSet).each(initSprite);
+        world.observer<Type, Sprite, Scale>().event(flecs::OnSet).each(updateScale);
+
         world.observer<Type, Sprite, Variants>().event(flecs::OnSet).each(updateSpriteVariant);
 
         world.system<Sprite>().kind(flecs::OnStore).each(render);
@@ -21,6 +24,7 @@ struct RenderModule {
 
     struct Type;
     struct Sprite;
+    struct Scale;
     struct Animation;
     struct Expand;
     struct Variants;
@@ -30,9 +34,9 @@ private:
     //             Systems               //
     //===================================//
 
-    // TODO: Find a way to assure that the sprite is initialized before using it (.add<Sprite>() doesn't do that currently)
-
     static void initSprite(flecs::entity entity, Type& type) {
+
+        Scale scale;
 
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
@@ -45,26 +49,35 @@ private:
 
         sprite.texture      = &sheet->texture;
         sprite.sourceRect   = data.sourceRect();
-        sprite.xScale       = sheet->scale;
-        sprite.yScale       = sheet->scale;
         sprite.zOrder       = sheet->layer;
 
         sprite.destRect     = {
                 .x = 0,
                 .y = 0,
-                .width = sprite.sourceRect.width * sprite.xScale * UI_SCALE,
-                .height = sprite.sourceRect.height * sprite.yScale * UI_SCALE
+                .width  = sprite.sourceRect.width    * scale.width   * sheet->scale * UI_SCALE,
+                .height = sprite.sourceRect.height   * scale.height  * sheet->scale * UI_SCALE
         };
 
         entity.set<Sprite>(sprite);
     }
 
-    static void updateSpriteVariant(Type& type, Sprite& sprite, Variants& variants) {
-        std::cout << "Updating Sprite Variant" << std::endl;
-
+    static void updateScale(Type& type, Sprite& sprite, Scale& scale) {
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
-        std::cout << "Updating Sprite Variant Passed" << std::endl;
+        SpriteData data;
+        SpriteSheet* sheet;
+
+        data = RSC::getSpriteData(type.type);
+        sheet = data.spriteSheet();
+
+        sprite.destRect.width  = sprite.sourceRect.width    * scale.width   * sheet->scale * UI_SCALE;
+        sprite.destRect.height = sprite.sourceRect.height   * scale.height  * sheet->scale * UI_SCALE;
+    }
+
+
+
+    static void updateSpriteVariant(Type& type, Sprite& sprite, Variants& variants) {
+        if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
         auto data = RSC::getSpriteData(type.type);
         sprite.sourceRect = data.sourceRect(variants.values);
@@ -77,7 +90,7 @@ private:
         DrawTexturePro(*sprite.texture, sourceRect, destRect, {0, 0}, 0, WHITE);
     }
 
-    static void renderWithExpansion(Type& type, Sprite& sprite, Expand& expand) {
+    static void renderWithExpansion(Type& type, Sprite& sprite, Expand& expand, const Scale* scale) {
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
         auto data = RSC::getSpriteData(type.type);
@@ -95,12 +108,12 @@ private:
         float rWidth  = data.width;
         float rHeight = data.height;
 
-        float absWidth = sprite.sourceRect.width * sprite.xScale * UI_SCALE;
-        float absHeight = sprite.sourceRect.height * sprite.yScale * UI_SCALE;
+        float absWidth  = sprite.sourceRect.width   * scale->width  * UI_SCALE;
+        float absHeight = sprite.sourceRect.height  * scale->height * UI_SCALE;
 
-        float tileWidth = sourceRect.width / rWidth;
-        float tileHeight = sourceRect.height / rHeight;
-        float absTileWidth = absWidth / rWidth;
+        float tileWidth     = sourceRect.width / rWidth;
+        float tileHeight    = sourceRect.height / rHeight;
+        float absTileWidth  = absWidth / rWidth;
         float absTileHeight = absHeight / rHeight;
 
         for (int i = 0; i < rHeight; i++) {
@@ -134,9 +147,12 @@ public:
         Texture2D*      texture     = nullptr;
         Rectangle       sourceRect  = {0, 0, 0, 0};
         Rectangle       destRect    = {0, 0, 0, 0};
-        float           xScale      = 1.0f;
-        float           yScale      = 1.0f;
         int             zOrder      = 1;
+    };
+
+    struct Scale {
+        float width = 1.0f;
+        float height = 1.0f;
     };
 
     struct Animation {

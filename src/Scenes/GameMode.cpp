@@ -3,7 +3,6 @@
 #include "../Game.h"
 
 void GameMode::enter() {
-    std::cout << "Enter Game Mode Scene" << "\n";
 }
 
 Scene* GameMode::update() {
@@ -18,5 +17,4 @@ Scene* GameMode::update() {
 }
 
 void GameMode::exit() {
-    std::cout << "Exit Game Mode Scene" << "\n";
 }
