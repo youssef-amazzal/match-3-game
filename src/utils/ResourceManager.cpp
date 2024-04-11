@@ -4,6 +4,10 @@
 std::unordered_map<SPRITES_SHEETS, std::shared_ptr<SpriteSheet>> ResourceManager::spriteSheets;
 std::unordered_map<UI_ELEMENTS, SpriteData> ResourceManager::sprites;
 
+//==============================//
+//          Loaders             //
+//==============================//
+
 void RSC::loadTextures() {
     loadSpriteSheets();
     loadSprites();
@@ -58,12 +62,10 @@ void RSC::loadIndividualSprites(const json& item, SPRITES_SHEETS sheetType) {
     }
 }
 
-
-
 void RSC::loadAnimations(const json& sprite, SpriteData& data) {
     for (const auto& animation : sprite.at("animations")) {
         auto frames = animation.at("frames").get<std::vector<int>>();
-        data.animations[animation.at("type").get<UI_ANIMATIONS>()] = frames;
+        data.animations[animation.at("type").get<ANIMATIONS>()] = frames;
     }
 }
 
@@ -85,5 +87,14 @@ void RSC::loadVariants(const json& sprite, SpriteData& data) {
     }
 }
 
+
+
+//==============================//
+//            Getters           //
+//==============================//
+
+SpriteData& RSC::getSpriteData(UI_ELEMENTS type) {
+    return sprites[type];
+}
 
 

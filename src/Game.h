@@ -1,11 +1,13 @@
 #pragma once
 #include "headers/Header.h"
 #include "utils/ResourceManager.h"
-#include "Scenes/Screen.h"
+#include "Scenes/Scene.h"
 
 class Game {
+public:
+    static flecs::world ecs;
 private:
-    static Screen* screen;
+    static Scene* scene;
 public:
     Game() = default;
     ~Game() = default;
@@ -16,6 +18,7 @@ public:
 
         // WARNING: If you try to load textures before creating the window, you will face a segmentation fault
         // without any further explanation.
+        RSC::loadTextures();
 
     }
 
@@ -26,9 +29,9 @@ public:
 
                 ClearBackground(RAYWHITE);
 
-                Screen* newScreen = screen->play();
-                if (newScreen != nullptr) {
-                    screen = newScreen;
+                Scene* newScene = scene->play();
+                if (newScene != nullptr) {
+                    scene = newScene;
                 }
 
 
@@ -38,6 +41,7 @@ public:
     static void exit() {
         CloseWindow();
     }
+
 
 };
 

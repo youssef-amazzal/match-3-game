@@ -1,22 +1,18 @@
 #pragma once
 #include "../headers/Header.h"
-#include "Screen.h"
+#include "Scene.h"
 
 class MainMenu;
 
-class GameMode : public Screen {
+class GameMode : public Scene {
 public:
-    GameMode() : Screen() {};
+    GameMode() : Scene() {};
 
 private:
-    void enter() override {
-        std::cout << "Enter Game mode Screen" << "\n";
-    }
+    void enter() override;
 
-    Screen * update() override;
+    Scene * update() override;
 
-    void exit() override {
-        std::cout << "Exit Game mode Screen" << "\n";
-    }
+    void exit() override;
 
 };

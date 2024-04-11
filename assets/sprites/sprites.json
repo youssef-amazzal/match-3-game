@@ -77,7 +77,7 @@
             "type": "Color",
             "values": [
               {"name": "green", "idStep": 0},
-              {"name": "red", "idStep": 300}
+              {"name": "red", "idStep": 240}
             ]
           }
         ]

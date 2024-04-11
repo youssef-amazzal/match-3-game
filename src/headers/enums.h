@@ -71,17 +71,17 @@ NLOHMANN_JSON_SERIALIZE_ENUM(UI_ELEMENTS, {
     {UI_BG_PATTERN, "BgPattern"}
 })
 
-enum UI_ANIMATIONS {
-    AN_INVALID,
-    AN_IDLE,
-    AN_HOVER,
-    AN_PRESS,
+enum class ANIMATIONS {
+    INVALID,
+    IDLE,
+    HOVER,
+    PRESS,
 };
-NLOHMANN_JSON_SERIALIZE_ENUM(UI_ANIMATIONS, {
-{AN_INVALID ,nullptr},
-{AN_IDLE    ,"idle"},
-{AN_HOVER   ,"hover"},
-{AN_PRESS   ,"press"},
+NLOHMANN_JSON_SERIALIZE_ENUM(ANIMATIONS, {
+{ANIMATIONS::INVALID ,nullptr},
+{ANIMATIONS::IDLE    ,"idle"},
+{ANIMATIONS::HOVER   ,"hover"},
+{ANIMATIONS::PRESS   ,"press"},
 })
 
 enum UI_EXPANSION {

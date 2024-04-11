@@ -1,24 +1,20 @@
 #pragma once
-#include "Screen.h"
+#include "Scene.h"
 
 
-class MainMenu : public Screen {
+class MainMenu : public Scene {
 public:
     // declared public just so that I can use std::make_unique<MainMenu>()
-    MainMenu() : Screen() {}
+    MainMenu() : Scene() {}
 
 
 
 private:;
 
-    void enter() override {
-        std::cout << "Enter Main menu Screen" << "\n";
-    }
+    void enter() override;
 
-    Screen* update() override;
+    Scene* update() override;
 
-    void exit() override {
-        std::cout << "Exit Main menu Screen" << "\n";
-    }
+    void exit() override;
 
 };

@@ -19,6 +19,8 @@ public:
     static void loadAudio();
     static void loadFonts();
 
+    static SpriteData &getSpriteData(UI_ELEMENTS type);
+
 private:
     static void loadIndividualSprites(const json& item, SPRITES_SHEETS sheetType);
     static void loadAnimations(const json& sprite, SpriteData& data);
@@ -42,19 +44,18 @@ struct SpriteSheet {
     float           tileHeight;
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(SpriteSheet, type, rows, columns, tileWidth, tileHeight, scale, layer)
-
 };
 
 using ExpandTiles   = std::vector<std::vector<int>>;
 using map_variants  = std::unordered_map<VARIANTS, int>;
-using map_animation = std::unordered_map<UI_ANIMATIONS, std::vector<int>>;
+using map_animation = std::unordered_map<ANIMATIONS, std::vector<int>>;
 
 struct SpriteData {
     friend class ResourceManager;
-    friend class Render;
+    friend class RenderModule;
 private:
-    SPRITES_SHEETS  source;
-    UI_ELEMENTS     type;
+    SPRITES_SHEETS  source  = SPRITES_SHEETS::SP_INVALID;
+    UI_ELEMENTS     type    = UI_ELEMENTS::UI_INVALID;
     int             id;
     float           width;
     float           height;
@@ -65,14 +66,38 @@ private:
 
 public:
 
-    Texture2D texture() {
-        return RSC::spriteSheets[source]->texture;
+    int getId() {
+        return id;
     }
 
-    template<typename... Variants>
-    Rectangle sourceRect(Variants... variant) {
+    SpriteSheet* spriteSheet() {
+        return RSC::spriteSheets[source].get();
+    }
+
+    Rectangle sourceRect(std::vector<VARIANTS> variants) {
         int actualId = id;
-        actualId += (getIdStep(variant) + ...);
+        for (auto & variant : variants) {
+            actualId += getIdStep(variant);
+        }
+
+        // Global Data
+        auto spriteSheet = RSC::spriteSheets[source];
+        auto nbCol       = spriteSheet->columns;
+        auto tileWidth   = spriteSheet->tileWidth;
+        auto tileHeight  = spriteSheet->tileHeight;
+
+        Rectangle rect = {
+                .x = tileWidth   * static_cast<float>(actualId % nbCol),
+                .y = tileHeight  * static_cast<float>(actualId / nbCol),
+                .width  = width  * tileWidth,
+                .height = height * tileHeight
+        };
+
+        return rect;
+    }
+
+    Rectangle sourceRect() {
+        int actualId = id;
 
         // Global Data
         auto spriteSheet = RSC::spriteSheets[source];

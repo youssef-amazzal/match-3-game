@@ -56,11 +56,10 @@ add_executable(${PROJECT_NAME} main.cpp
         src/headers/libs.h
         src/headers/Header.h
         src/utils/ResourceManager.cpp
-        src/headers/components.h
         src/Game.cpp
         src/Game.h
-        src/Render/Render.h
-        src/Scenes/Screen.h
+        src/core/RenderModule.h
+        src/Scenes/Scene.h
         src/Scenes/MainMenu.h
         src/Scenes/GameMode.h
         src/Scenes/GameMode.cpp
