@@ -10,12 +10,12 @@ struct TransformModule {
         world.component<World>("World");
         world.component<Rotation>("Rotation");
 
-        world.system<Position, RenderModule::Sprite>()
+        world.system<Position, RenderModule::Sprite>("UpdatePosition")
                 .term_at(1).second<World>()
                 .term_at(2).optional()
                 .iter(updatePosition);
 
-        world.system<Position, RenderModule::Sprite, Position, RenderModule::Sprite, Relative, const Position>()
+        world.system<Position, RenderModule::Sprite, Position, RenderModule::Sprite, Relative, const Position>("UpdateChildPosition")
                 .term_at(1).second<World>()
 
                 // Don't : .term_at(3).second<World>().parent()
@@ -28,35 +28,17 @@ struct TransformModule {
                 .iter(updateChildPosition);
     }
 
-    struct Position {
-        float x = 0;
-        float y = 0;
-    };
+    struct Position;
+    struct Local;
+    struct World;
+    struct Relative;
+    struct Area;
+    struct Rotation;
 
-    struct Local{};
-    struct World{};
-
-    struct Relative{
-        enum class Alignment {
-            TOP_LEFT,
-            TOP_CENTER,
-            TOP_RIGHT,
-
-            CENTER_LEFT,
-            CENTER,
-            CENTER_RIGHT,
-
-            BOTTOM_LEFT,
-            BOTTOM_CENTER,
-            BOTTOM_RIGHT
-        };
-
-        Alignment alginement;
-    };
-
-    struct Rotation {
-        float angle;
-    };
+private:
+    //===================================//
+    //             Systems               //
+    //===================================//
 
     static void updatePosition(flecs::iter& it, Position* worldPos, RenderModule::Sprite* sprite) {
         for (auto i : it) {
@@ -85,7 +67,7 @@ struct TransformModule {
             parentDest  = parSprite->destRect;
             parentCenter = {parentDest.width / 2.0f, parentDest.height / 2.0f};
 
-            switch (relative->alginement) {
+            switch (relative->alignment) {
                 case Relative::Alignment::TOP_LEFT:
                     worldPos[i].x = parPos->x;
                     worldPos[i].y = parPos->y;
@@ -130,4 +112,40 @@ struct TransformModule {
             }
         }
     }
+
+public:
+    struct Position {
+        float x = 0;
+        float y = 0;
+    };
+
+    struct Local{};
+    struct World{};
+
+    struct Relative{
+        enum class Alignment {
+            TOP_LEFT,
+            TOP_CENTER,
+            TOP_RIGHT,
+
+            CENTER_LEFT,
+            CENTER,
+            CENTER_RIGHT,
+
+            BOTTOM_LEFT,
+            BOTTOM_CENTER,
+            BOTTOM_RIGHT
+        };
+
+        Alignment alignment;
+    };
+
+    struct Area {
+        float width;
+        float height;
+    };
+
+    struct Rotation {
+        float angle;
+    };
 };

@@ -12,14 +12,24 @@ struct RenderModule {
         world.component<Expand>     ("Expand");
         world.component<Variants>   ("Variants");
         world.component<Type>       ("Type");
+        world.component<Scale>      ("Scale");
+        world.component<Repeat>     ("Repeat");
 
 
-        world.observer<Type>().event(flecs::OnSet).each(initSprite);
-        world.observer<Type, Sprite, Scale>().event(flecs::OnSet).each(updateScale);
+        world.observer<Type>("InitSprite")
+                .event(flecs::OnSet).each(initSprite);
 
-        world.observer<Type, Sprite, Variants>().event(flecs::OnSet).each(updateSpriteVariant);
+        world.observer<Type, Sprite, Scale>("UpdateScale")
+                .event(flecs::OnSet).each(updateScale);
 
-        world.system<Sprite>().kind(flecs::OnStore).each(render);
+        world.observer<Type, Sprite, Variants>("ApplyVariant")
+                .event(flecs::OnSet).each(applyVariant);
+
+        world.system<Sprite>("RepeatRender").with<Repeat>()
+                .kind(flecs::OnStore).each(repeatRender);
+
+        world.system<Sprite>("RenderSprite").without<Repeat>()
+                .kind(flecs::OnStore).each(render);
     }
 
     struct Type;
@@ -28,6 +38,7 @@ struct RenderModule {
     struct Animation;
     struct Expand;
     struct Variants;
+    struct Repeat;
 
 private:
     //===================================//
@@ -76,7 +87,7 @@ private:
 
 
 
-    static void updateSpriteVariant(Type& type, Sprite& sprite, Variants& variants) {
+    static void applyVariant(Type& type, Sprite& sprite, Variants& variants) {
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
         auto data = RSC::getSpriteData(type.type);
@@ -88,6 +99,18 @@ private:
         Rectangle& destRect      = sprite.destRect;
 
         DrawTexturePro(*sprite.texture, sourceRect, destRect, {0, 0}, 0, WHITE);
+    }
+
+    static void repeatRender(flecs::entity entity, Sprite& sprite) {
+        Rectangle destRect      = sprite.destRect;
+
+        for (int i = 0; i < SCREEN_WIDTH / destRect.width; i++) {
+            for (int j = 0; j < SCREEN_HEIGHT / destRect.height; j++) {
+                destRect.x = destRect.width  * static_cast<float>(i);
+                destRect.y = destRect.height * static_cast<float>(j);
+                DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
+            }
+        }
     }
 
     static void renderWithExpansion(Type& type, Sprite& sprite, Expand& expand, const Scale* scale) {
@@ -136,6 +159,7 @@ private:
 
     }
 
+
 public:
 
     struct Type {
@@ -169,5 +193,7 @@ public:
     struct Variants {
         std::vector<VARIANTS> values;
     };
+
+    struct Repeat {};
 
 };
