@@ -5,8 +5,6 @@
 #include "../core/TransformModule.h"
 
 void MainMenu::enter() {
-    std::cout << "Enter Main menu Scene" << "\n";
-
     auto& ecs = Game::ecs;
     ecs.import<RenderModule>();
     ecs.import<TransformModule>();
@@ -34,6 +32,10 @@ void MainMenu::enter() {
             .add<TransformModule::Position, TransformModule::World>()
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
 
+
+    Gem.set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}});
+    Gem.set<RenderModule::Scale>({1.3f, 1.3f});
+
     ecs.set_scope(prev);
 
 }
@@ -51,8 +53,6 @@ Scene* MainMenu::update() {
 }
 
 void MainMenu::exit() {
-    std::cout << "Exit Main menu Scene" << "\n";
-
     sceneEntity->destruct();
     delete sceneEntity;
 }
