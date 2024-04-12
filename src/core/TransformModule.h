@@ -5,30 +5,24 @@ struct TransformModule {
 
     explicit TransformModule(flecs::world& world) {
         world.component<Position>   ("Position");
-        world.component<Local>      ("Local");
-        world.component<World>      ("World");
         world.component<Relative>   ("Relative");
         world.component<Area>       ("Area");
+        world.component<Depth>      ("Depth");
         world.component<Rotation>   ("Rotation");
 
         world.system<Position, Area, Position, Area, Relative, const Position>("UpdateChildPosition")
-                .term_at(1).second<World>()
-
                 // Don't : .term_at(3).second<World>().parent()
                 // Do :
-                .term_at(3).parent().second<World>()
-
+                .term_at(3).parent()
                 .term_at(4).parent()
-                .term_at(6).second<Local>()
-                .term_at(6).optional()
+                .term_at(6).second<Relative>().optional()
                 .iter(updateChildPosition);
     }
 
     struct Position;
-    struct Local;
-    struct World;
     struct Relative;
     struct Area;
+    struct Depth;
     struct Rotation;
 
 private:
@@ -123,6 +117,10 @@ public:
     struct Area {
         float width;
         float height;
+    };
+
+    struct Depth {
+        int value = 0;
     };
 
     struct Rotation {

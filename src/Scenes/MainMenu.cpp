@@ -22,7 +22,8 @@ void MainMenu::enter() {
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
             .add<RenderModule::Expand>     ()
             .add<RenderModule::Animation>  ()
-            .set<TransformModule::Position, TransformModule::World>({100, 100});
+            .set<RenderModule::Variants>({.values{ST_CLOSED}})
+            .set<TransformModule::Position>({100, 100});
 
     auto Gem = ecs.entity("Gem")
             .child_of(Slot)
@@ -30,12 +31,9 @@ void MainMenu::enter() {
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
             .add<RenderModule::Expand>     ()
             .add<RenderModule::Animation>  ()
-
+            .set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}})
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
 
-
-    Gem.set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}});
-    Gem.set<RenderModule::Scale>({1.3f, 1.3f});
 
     ecs.set_scope(prev);
 

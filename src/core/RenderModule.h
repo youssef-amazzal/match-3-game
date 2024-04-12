@@ -28,17 +28,16 @@ struct RenderModule {
         world.observer<Type, Sprite, Variants>("ApplyVariant")
                 .event(flecs::OnSet).each(applyVariant);
 
-        world.system<Sprite, TM::Area, TM::Position>("RepeatRender")
-                .with<Repeat>()
-                .term_at(3).second<TM::World>()
-                .kind(flecs::OnStore)
-                .each(repeatRender);
 
-        world.system<Sprite, TM::Area, TM::Position>("RenderSprite")
-                .without<Repeat>()
-                .term_at(3).second<TM::World>()
+        world.system<Sprite, TM::Area, const TM::Position, const TM::Depth>("Render")
+                .order_by<TM::Depth>([](flecs::entity_t e1, const TM::Depth* d1, flecs::entity_t e2, const TM::Depth* d2) {
+                    return d1->value - d2->value; // Ascending
+                })
                 .kind(flecs::OnStore)
                 .each(render);
+
+
+
 
 //        world.system().interval(3).with<Sprite>().each([](flecs::entity entity) {
 //            std::printf("%s: %-10s\n\n", entity.name().c_str(), entity.type().str().c_str());
@@ -47,7 +46,6 @@ struct RenderModule {
 
     struct Type;
     struct Sprite;
-    struct Layer;
     struct Scale;
     struct Animation;
     struct Expand;
@@ -55,6 +53,7 @@ struct RenderModule {
     struct Repeat;
 
 private:
+
     //===================================//
     //             Systems               //
     //===================================//
@@ -63,11 +62,12 @@ private:
 
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
-        Scale* scale    = entity.get_mut<Scale>();
-        Sprite* sprite  = entity.get_mut<Sprite>();
+        Scale*  scale    = entity.get_mut<Scale>();
+        Sprite* sprite   = entity.get_mut<Sprite>();
 
-        TM::Position* position  = entity.get_mut<TM::Position, TM::World>();
+        TM::Position* position  = entity.get_mut<TM::Position>();
         TM::Area* area          = entity.get_mut<TM::Area>();
+        TM::Depth* depth        = entity.get_mut<TM::Depth>();
 
 
         auto data = RSC::getSpriteData(type.type);
@@ -77,6 +77,7 @@ private:
 
         sprite->texture      = &sheet->texture;
         sprite->sourceRect   = data.sourceRect();
+        depth->value         = sheet->layer;
 
         *position = {0, 0};
         area->width = sprite->sourceRect.width    * scale->width   * sheet->scale * UI_SCALE;
@@ -103,7 +104,7 @@ private:
         sprite.sourceRect = data.sourceRect(variants.values);
     }
 
-    static void render(Sprite& sprite, TM::Area& area, TM::Position& position) {
+    static void render(Sprite& sprite, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
         Rectangle destRect = {
                 .x = position.x,
                 .y = position.y,
@@ -111,23 +112,16 @@ private:
                 .height = area.height
         };
 
-        DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
-    }
-
-    static void repeatRender(Sprite& sprite, TM::Area& area, TM::Position& position) {
-        Rectangle destRect = {
-                .x = position.x,
-                .y = position.y,
-                .width = area.width,
-                .height = area.height
-        };
-
-        for (int i = 0; i < SCREEN_WIDTH / destRect.width; i++) {
-            for (int j = 0; j < SCREEN_HEIGHT / destRect.height; j++) {
-                destRect.x = destRect.width  * static_cast<float>(i);
-                destRect.y = destRect.height * static_cast<float>(j);
-                DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
+        if (sprite.repeat) {
+            for (int i = 0; i < SCREEN_WIDTH / destRect.width; i++) {
+                for (int j = 0; j < SCREEN_HEIGHT / destRect.height; j++) {
+                    destRect.x = destRect.width  * static_cast<float>(i);
+                    destRect.y = destRect.height * static_cast<float>(j);
+                    DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
+                }
             }
+        } else {
+            DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
         }
     }
 
@@ -186,12 +180,9 @@ public:
     };
 
     struct Sprite {
-        Texture2D*      texture     = nullptr;
-        Rectangle       sourceRect  = {0, 0, 0, 0};
-    };
-
-    struct Layer {
-        int zOrder = 0;
+        Texture2D*  texture     = nullptr;
+        Rectangle   sourceRect  = {0, 0, 0, 0};
+        bool        repeat      = false;
     };
 
     struct Scale {
