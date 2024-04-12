@@ -1,8 +1,9 @@
 #include "src/Game.h"
 
 int main() {
-    Game::init();
-    Game::run();
-    Game::exit();
+    Game& Game = Game::getInstance();
+    Game.init();
+    Game.run();
+    Game.exit();
     return 0;
 }

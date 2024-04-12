@@ -7,7 +7,6 @@
 class Scene {
     friend class Game;
 private:
-    flecs::entity* prevScope = nullptr;
     bool isPlaying           = false;
 
     // this is where any actions that needs to be done every time the scene is played are done
@@ -21,28 +20,20 @@ private:
 
 protected:
     flecs::world& world;
-    flecs::entity* sceneEntity = nullptr;
-    Scene(flecs::world& world) : world(world){
-        sceneEntity = new flecs::entity(world);
-        prevScope   = new flecs::entity(world);
+    flecs::entity sceneEntity;
+    flecs::entity prevScope;
+
+    Scene(flecs::world& world) : world(world), sceneEntity(world.entity("Scene")), prevScope(world.set_scope(sceneEntity)) {
+        world.set_scope(sceneEntity);
+
+        sceneEntity.set<TransformModule::Position>({0,0});
+        sceneEntity.set<TransformModule::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
     };
-
-    template<class T>
-    static Scene* getInstance(flecs::world& world) {
-
-        if constexpr (std::is_base_of<Scene, T>::value) {
-            static_assert(std::is_base_of<Scene, T>::value, "T must inherit from Scene");
-        }
-
-        static std::unique_ptr<Scene> instance = std::make_unique<T>(T(world));
-        return instance.get();
-    }
 
 public:
     virtual ~Scene() {
-        sceneEntity->destruct();
-        prevScope->destruct();
-        delete sceneEntity;
+        world.set_scope(prevScope);
+        sceneEntity.destruct();
     };
 
 
@@ -51,27 +42,25 @@ public:
 
         if (!isPlaying) {
             isPlaying = true;
-
             // scope the world to the scene so that all entities created in the scene are children of the scene
-            *prevScope = world.set_scope(*sceneEntity);
             enter();
+
         }
 
-        auto nextSceen = update();
 
-        if (nextSceen) {
+        auto nextScene = update();
+
+
+        if (nextScene) {
             isPlaying = false;
 
             exit();
 
-            // remove all entities created in the scene
-            world.delete_with(flecs::ChildOf, *sceneEntity);
-
             // reset the world scope to the previous scope
-            world.set_scope(*prevScope);
         }
 
-        return nextSceen;
+
+        return nextScene;
     }
 
 };

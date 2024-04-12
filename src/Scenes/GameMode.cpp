@@ -11,7 +11,7 @@ Scene* GameMode::update() {
     world.progress();
 
     if (IsKeyPressed(KEY_SPACE)) {
-        return Scene::getInstance<MainMenu>(world);
+        return new MainMenu(world);
     }
 
     return nullptr;

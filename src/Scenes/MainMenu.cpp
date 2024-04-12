@@ -18,6 +18,7 @@ void MainMenu::enter() {
             .add<RenderModule::Expand>     ()
             .add<RenderModule::Animation>  ()
             .set<RenderModule::Variants>({.values{ST_CLOSED}})
+            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER})
             .set<TransformModule::Position>({100, 100});
 
     auto Gem = world.entity("Gem")
@@ -40,7 +41,7 @@ Scene* MainMenu::update() {
     world.progress();
 
     if (IsKeyPressed(KEY_SPACE)) {
-    return Scene::getInstance<GameMode>(world);
+        return new GameMode(world);
     }
 
     return nullptr;

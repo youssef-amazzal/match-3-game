@@ -2,31 +2,38 @@
 #include "headers/Header.h"
 #include "utils/ResourceManager.h"
 #include "Scenes/Scene.h"
+#include "Scenes/MainMenu.h"
 
 class Game {
 public:
-    static flecs::world ecs;
+    flecs::world world;
 private:
-    static Scene* scene;
+    Scene* scene;
 public:
     Game() = default;
+
     ~Game() = default;
 
-    static void init() {
+    static Game& getInstance() {
+        static Game instance;
+        return instance;
+    }
+
+    void init() {
         InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Tetris");
         SetTargetFPS(FRAME_RATE);
-
         // WARNING: If you try to load textures before creating the window, you will face a segmentation fault
         // without any further explanation.
         RSC::loadTextures();
 
+        world.import<RenderModule>();
+        world.import<TransformModule>();
 
-        ecs.import<RenderModule>();
-        ecs.import<TransformModule>();
+        scene = new MainMenu(world);
 
     }
 
-    static void run() {
+    void run() {
 
         while (!WindowShouldClose()) {
             BeginDrawing();
@@ -35,7 +42,9 @@ public:
 
                 Scene* newScene = scene->play();
                 if (newScene != nullptr) {
+                    auto oldScene = scene;
                     scene = newScene;
+                    delete oldScene;
                 }
 
 
