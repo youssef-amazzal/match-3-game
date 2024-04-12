@@ -1,16 +1,17 @@
 #include "GameMode.h"
 #include "MainMenu.h"
-#include "../Game.h"
+
+
 
 void GameMode::enter() {
 }
 
 Scene* GameMode::update() {
     DrawText("GAME MODE SCREEN", 20, 20, 40, RED);
-    Game::ecs.progress();
+    world.progress();
 
     if (IsKeyPressed(KEY_SPACE)) {
-        return Scene::getInstance<MainMenu>();
+        return Scene::getInstance<MainMenu>(world);
     }
 
     return nullptr;

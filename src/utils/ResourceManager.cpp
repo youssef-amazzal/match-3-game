@@ -8,6 +8,8 @@ std::unordered_map<UI_ELEMENTS, SpriteData> ResourceManager::sprites;
 //          Loaders             //
 //==============================//
 
+///------------------------- TEXTURES -------------------------//
+
 void RSC::loadTextures() {
     loadSpriteSheets();
     loadSprites();
@@ -87,6 +89,8 @@ void RSC::loadVariants(const json& sprite, SpriteData& data) {
     }
 }
 
+
+///------------------------- SCENES -------------------------//
 
 
 //==============================//

@@ -20,6 +20,10 @@ public:
         // without any further explanation.
         RSC::loadTextures();
 
+
+        ecs.import<RenderModule>();
+        ecs.import<TransformModule>();
+
     }
 
     static void run() {

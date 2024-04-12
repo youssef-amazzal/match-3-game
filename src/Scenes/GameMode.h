@@ -6,12 +6,13 @@ class MainMenu;
 
 class GameMode : public Scene {
 public:
-    GameMode() : Scene() {};
+    GameMode(flecs::world& world) : Scene(world) {};
 
 private:
+
     void enter() override;
 
-    Scene * update() override;
+    Scene* update() override;
 
     void exit() override;
 

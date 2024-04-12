@@ -5,7 +5,7 @@
 class MainMenu : public Scene {
 public:
     // declared public just so that I can use std::make_unique<MainMenu>()
-    MainMenu() : Scene() {}
+    MainMenu(flecs::world& world) : Scene(world) {}
 
 
 
