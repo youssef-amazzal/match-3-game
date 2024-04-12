@@ -1,21 +1,17 @@
 #pragma once
 #include "../headers/Header.h"
-#include "RenderModule.h"
 
 struct TransformModule {
 
     explicit TransformModule(flecs::world& world) {
-        world.component<Position>("Position");
-        world.component<Local>("Local");
-        world.component<World>("World");
-        world.component<Rotation>("Rotation");
+        world.component<Position>   ("Position");
+        world.component<Local>      ("Local");
+        world.component<World>      ("World");
+        world.component<Relative>   ("Relative");
+        world.component<Area>       ("Area");
+        world.component<Rotation>   ("Rotation");
 
-        world.system<Position, RenderModule::Sprite>("UpdatePosition")
-                .term_at(1).second<World>()
-                .term_at(2).optional()
-                .iter(updatePosition);
-
-        world.system<Position, RenderModule::Sprite, Position, RenderModule::Sprite, Relative, const Position>("UpdateChildPosition")
+        world.system<Position, Area, Position, Area, Relative, const Position>("UpdateChildPosition")
                 .term_at(1).second<World>()
 
                 // Don't : .term_at(3).second<World>().parent()
@@ -40,75 +36,59 @@ private:
     //             Systems               //
     //===================================//
 
-    static void updatePosition(flecs::iter& it, Position* worldPos, RenderModule::Sprite* sprite) {
-        for (auto i : it) {
-            worldPos[i].x = worldPos[i].x;
-            worldPos[i].y = worldPos[i].y;
-
-            if (sprite) {
-                sprite[i].destRect.x = worldPos[i].x;
-                sprite[i].destRect.y = worldPos[i].y;
-            }
-        }
-
-    }
-
     static void updateChildPosition(
             flecs::iter &it,
-            Position *worldPos, RenderModule::Sprite *sprite,
-            Position *parPos,   RenderModule::Sprite *parSprite,
+            Position *childPos, Area *childArea,
+            Position *parPos,   Area *parArea,
             Relative *relative, const Position *localPos) {
 
-        Rectangle childDest, parentDest;
         Vector2 parentCenter;
 
         for (auto i : it) {
-            childDest   = sprite[i].destRect;
-            parentDest  = parSprite->destRect;
-            parentCenter = {parentDest.width / 2.0f, parentDest.height / 2.0f};
+            parentCenter = {parArea->width / 2.0f, parArea->height / 2.0f};
 
             switch (relative->alignment) {
                 case Relative::Alignment::TOP_LEFT:
-                    worldPos[i].x = parPos->x;
-                    worldPos[i].y = parPos->y;
+                    childPos[i].x = parPos->x;
+                    childPos[i].y = parPos->y;
                     break;
                 case Relative::Alignment::TOP_CENTER:
-                    worldPos[i].x = parPos->x + parentCenter.x - childDest.width / 2.0f;
-                    worldPos[i].y = parPos->y;
+                    childPos[i].x = parPos->x + parentCenter.x - childArea->width / 2.0f;
+                    childPos[i].y = parPos->y;
                     break;
                 case Relative::Alignment::TOP_RIGHT:
-                    worldPos[i].x = parPos->x + parentDest.width - childDest.width;
-                    worldPos[i].y = parPos->y;
+                    childPos[i].x = parPos->x + parArea->width - childArea->width;
+                    childPos[i].y = parPos->y;
                     break;
                 case Relative::Alignment::CENTER_LEFT:
-                    worldPos[i].x = parPos->x;
-                    worldPos[i].y = parPos->y + parentCenter.y - childDest.height / 2.0f;
+                    childPos[i].x = parPos->x;
+                    childPos[i].y = parPos->y + parentCenter.y - childArea->height / 2.0f;
                     break;
                 case Relative::Alignment::CENTER:
-                    worldPos[i].x = parPos->x + parentCenter.x - childDest.width / 2.0f;
-                    worldPos[i].y = parPos->y + parentCenter.y - childDest.height / 2.0f;
+                    childPos[i].x = parPos->x + parentCenter.x - childArea->width / 2.0f;
+                    childPos[i].y = parPos->y + parentCenter.y - childArea->height / 2.0f;
                     break;
                 case Relative::Alignment::CENTER_RIGHT:
-                    worldPos[i].x = parPos->x + parentDest.width - childDest.width;
-                    worldPos[i].y = parPos->y + parentCenter.y - childDest.height / 2.0f;
+                    childPos[i].x = parPos->x + parArea->width - childArea->width;
+                    childPos[i].y = parPos->y + parentCenter.y - childArea->height / 2.0f;
                     break;
                 case Relative::Alignment::BOTTOM_LEFT:
-                    worldPos[i].x = parPos->x;
-                    worldPos[i].y = parPos->y + parentDest.height - childDest.height;
+                    childPos[i].x = parPos->x;
+                    childPos[i].y = parPos->y + parArea->height - childArea->height;
                     break;
                 case Relative::Alignment::BOTTOM_CENTER:
-                    worldPos[i].x = parPos->x + parentCenter.x - childDest.width / 2.0f;
-                    worldPos[i].y = parPos->y + parentDest.height - childDest.height;
+                    childPos[i].x = parPos->x + parentCenter.x - childArea->width / 2.0f;
+                    childPos[i].y = parPos->y + parArea->height - childArea->height;
                     break;
                 case Relative::Alignment::BOTTOM_RIGHT:
-                    worldPos[i].x = parPos->x + parentDest.width - childDest.width;
-                    worldPos[i].y = parPos->y + parentDest.height - childDest.height;
+                    childPos[i].x = parPos->x + parArea->width - childArea->width;
+                    childPos[i].y = parPos->y + parArea->height - childArea->height;
                     break;
             }
 
             if (localPos) {
-                worldPos[i].x += localPos[i].x;
-                worldPos[i].y += localPos[i].y;
+                childPos[i].x += localPos[i].x;
+                childPos[i].y += localPos[i].y;
             }
         }
     }

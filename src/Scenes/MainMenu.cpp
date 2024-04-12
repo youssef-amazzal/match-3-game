@@ -1,8 +1,7 @@
 #include "MainMenu.h"
 #include "GameMode.h"
 #include "../Game.h"
-#include "../core/RenderModule.h"
-#include "../core/TransformModule.h"
+
 
 void MainMenu::enter() {
     auto& ecs = Game::ecs;
@@ -13,6 +12,10 @@ void MainMenu::enter() {
     *sceneEntity = ecs.entity();
 
     auto prev = ecs.set_scope(*sceneEntity);
+
+    HUD hud(ecs);
+
+    hud.changeBgColor(C_BLUE);
 
 
     auto Slot = ecs.entity("Gem Slot")
@@ -28,8 +31,6 @@ void MainMenu::enter() {
             .add<RenderModule::Expand>     ()
             .add<RenderModule::Animation>  ()
 
-            .add<TransformModule::Position>()
-            .add<TransformModule::Position, TransformModule::World>()
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
 
 
