@@ -23,12 +23,6 @@
                  "height":56.8444,
                  "id":4,
                  "name":"Board",
-                 "properties":[
-                        {
-                         "name":"nb_slots",
-                         "type":"int",
-                         "value":15
-                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
