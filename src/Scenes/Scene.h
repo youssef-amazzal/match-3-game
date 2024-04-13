@@ -26,11 +26,8 @@ protected:
     explicit Scene(flecs::world& world) : world(world), sceneEntity(world.entity("Scene")), prevScope(world.set_scope(sceneEntity)) {
         world.set_scope(sceneEntity);
 
-        sceneEntity.set<TransformModule::Container>({
-            .items     = {},
-            .alignment = TransformModule::Container::Alignment::FREE,
-            .fixed     = true,
-        }),
+        sceneEntity.add<TransformModule::Container>(),
+        sceneEntity.add<TransformModule::Container::Fixed>(),
         sceneEntity.set<TransformModule::Position>({0,0});
         sceneEntity.set<TransformModule::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
     };

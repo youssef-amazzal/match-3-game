@@ -130,7 +130,8 @@ enum VARIANTS {
 
     // STATES
     ST_INVALID,
-    ST_OPEN, ST_CLOSED,
+    ST_OPEN,        ST_CLOSED,
+    ST_UNSELECTED,  ST_SELECTED,
 
     // ICONS
     IC_INVALID,         IC_ZERO,            IC_RIGHT,
@@ -205,9 +206,11 @@ NLOHMANN_JSON_SERIALIZE_ENUM(VARIANTS, {
 {SH_TRIANGLE,"triangle"},     {SH_HEX     ,"hex"},
 
 // STATES
-{ST_INVALID ,nullptr},
-{ST_OPEN    ,"open"},
-{ST_CLOSED  ,"closed"},
+{ST_INVALID     ,nullptr},
+{ST_OPEN        ,"open"},
+{ST_CLOSED      ,"closed"},
+{ST_UNSELECTED  ,"unselected"},
+{ST_SELECTED    ,"selected"},
 
 // ICONS
 {IC_INVALID     ,nullptr},      {IC_ZERO        ,"zero"},

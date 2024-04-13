@@ -14,11 +14,9 @@ void MainMenu::enter() {
 
      auto Board = world.entity("Board 1")
                 .add<TransformModule::ContainedBy>(sceneEntity)
-                .set<TransformModule::Container>({
-                    .items = {},
-                    .alignment = TransformModule::Container::Alignment::ROW,
-                    .fixed = false
-                })
+                .add<TransformModule::Container>()
+                .set<TransformModule::Container::Alignment>({TransformModule::Container::Alignment::Type::ROW})
+                .set<TransformModule::Container::Gap>({5})
                 .add<TransformModule::Area>()
                 .set<TransformModule::Relative>({TransformModule::Relative::Alignment::BOTTOM_CENTER})
                 .set<TransformModule::Position, TransformModule::Relative>({0, -100})

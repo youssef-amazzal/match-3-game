@@ -36,7 +36,9 @@
             "type": "State",
             "values": [
               {"name": "open", "idStep": 0},
-              {"name": "closed", "idStep": 3}
+              {"name": "closed", "idStep": 3},
+              {"name": "unselected", "idStep": 6},
+              {"name": "selected", "idStep": 9}
             ]
           }
         ]
