@@ -8,31 +8,34 @@
 
 void MainMenu::enter() {
 
-    HUD hud(world);
-
-    hud.changeBgColor(C_BLUE);
 
      auto Board = world.entity("Board 1")
+                .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+                .set<RenderModule::Variants>({.values{ST_CLOSED}})
+                .set<RenderModule::Repeat>({.type = RenderModule::Repeat::HORIZONTAL})
+
                 .add<TransformModule::ContainedBy>(sceneEntity)
-                .add<TransformModule::Container>()
-                .set<TransformModule::Container::Alignment>({TransformModule::Container::Alignment::Type::ROW})
-                .set<TransformModule::Container::Gap>({5})
-                .add<TransformModule::Area>()
                 .set<TransformModule::Relative>({TransformModule::Relative::Alignment::BOTTOM_CENTER})
                 .set<TransformModule::Position, TransformModule::Relative>({0, -100})
+
+                .add<TransformModule::Container>()
+                .set<TransformModule::Container::Alignment>({TransformModule::Container::Alignment::Type::ROW})
+
                 .with<TransformModule::ContainedBy>([&]{
                     for (int i = 0; i < 5; i++) {
                         auto Slot = world.entity()
                             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
-                            .set<RenderModule::Variants>({.values{ST_CLOSED}})
+                            .set<RenderModule::Variants>({.values{ST_OPEN}})
+                            .set<RenderModule::Scale>({1.3, 1.3})
 
                             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER})
                             .set<TransformModule::Position>({100, 100})
                             .with<TransformModule::ContainedBy>([&]{
-//                                auto Gem = world.entity()
-//                                        .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
-//                                        .set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}})
-//                                        .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
+                                auto Gem = world.entity()
+                                        .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
+                                        .set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}})
+                                        .set<RenderModule::Scale>({2, 2})
+                                        .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
                             });
                     }
                 });
@@ -51,7 +54,8 @@ void MainMenu::enter() {
 //
     auto Slot1 = world.entity("Slot1")
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
-            .set<RenderModule::Variants>({.values{ST_CLOSED}})
+            .set<RenderModule::Variants>({.values{ST_OPEN}})
+            .set<RenderModule::Scale>({1.3, 1.3})
 
             .add<TransformModule::ContainedBy>(Board)
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
@@ -61,13 +65,14 @@ void MainMenu::enter() {
 
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
             .set<RenderModule::Variants>({.values{C_RED, SH_HEART}})
+            .set<RenderModule::Scale>({2, 2})
 
             .add<TransformModule::ContainedBy>(Slot1)
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
 
     auto NextSloat = world.entity("NextSloat")
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
-            .set<RenderModule::Variants>({.values{ST_OPEN}})
+            .set<RenderModule::Variants>({.values{ST_SELECTED}})
             .set<RenderModule::Scale>({2,2})
 
             .add<TransformModule::ContainedBy>(sceneEntity)

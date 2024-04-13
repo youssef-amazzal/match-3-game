@@ -22,14 +22,15 @@ struct RenderModule {
         world.observer<Type>("InitSprite")
                 .event(flecs::OnSet).each(initSprite);
 
-        world.observer<Type, Sprite, Scale, TM::Area>("UpdateScale")
+        world.observer<Sprite, Scale, TM::Area>("UpdateScale")
+                .without<TransformModule::Container::Fixed>()
                 .event(flecs::OnSet).each(updateScale);
 
         world.observer<Type, Sprite, Variants>("ApplyVariant")
                 .event(flecs::OnSet).each(applyVariant);
 
 
-        world.system<Sprite, TM::Area, const TM::Position, const TM::Depth>("Render")
+        world.system<Sprite, Scale, TM::Area, const TM::Position, const TM::Depth>("Render")
                 .order_by<TM::Depth>([](flecs::entity_t e1, const TM::Depth* d1, flecs::entity_t e2, const TM::Depth* d2) {
                     return d1->value - d2->value; // Ascending
                 })
@@ -71,30 +72,20 @@ private:
 
 
         auto data = RSC::getSpriteData(type.type);
-        SpriteSheet* sheet = data.spriteSheet();
-
-        type.id = data.getId();
+        SpriteSheet* sheet  = data.spriteSheet();
 
         sprite->texture      = &sheet->texture;
         sprite->sourceRect   = data.sourceRect();
         depth->value         = sheet->layer;
 
         *position = {0, 0};
-        area->width = sprite->sourceRect.width    * scale->width   * sheet->scale * UI_SCALE;
-        area->height = sprite->sourceRect.height  * scale->height  * sheet->scale * UI_SCALE;
+        area->width  = sprite->sourceRect.width   * scale->width  * UI_SCALE;
+        area->height = sprite->sourceRect.height  * scale->height * UI_SCALE;
     }
 
-    static void updateScale(Type& type, Sprite& sprite, Scale& scale, TM::Area& area) {
-        if (type.type == UI_ELEMENTS::UI_INVALID) return;
-
-        SpriteData data;
-        SpriteSheet* sheet;
-
-        data = RSC::getSpriteData(type.type);
-        sheet = data.spriteSheet();
-
-        area.width  = sprite.sourceRect.width    * scale.width   * sheet->scale * UI_SCALE;
-        area.height = sprite.sourceRect.height   * scale.height  * sheet->scale * UI_SCALE;
+    static void updateScale(Sprite& sprite, Scale& scale, TM::Area& area) {
+        area.width  = sprite.sourceRect.width    * scale.width    * UI_SCALE;
+        area.height = sprite.sourceRect.height   * scale.height   * UI_SCALE;
     }
 
     static void applyVariant(Type& type, Sprite& sprite, Variants& variants) {
@@ -104,24 +95,54 @@ private:
         sprite.sourceRect = data.sourceRect(variants.values);
     }
 
-    static void render(Sprite& sprite, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
+    static void render(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
+        float scaledTileWidth  = area.width;
+        float scaledTileHeight = area.height;
+        auto hGap = 0, vGap = 0;
+
+        std::cout << std::endl;
+
+
+        if (entity.has<Repeat>()) {
+            switch (entity.get<Repeat>()->type) {
+
+                case Repeat::HORIZONTAL:
+                    scaledTileWidth  = area.height;
+                    scaledTileHeight = area.height;
+                    hGap = entity.get_mut<TM::Container::Gap>()->value;
+                    break;
+
+                case Repeat::VERTICAL:
+                    scaledTileWidth  = area.width;
+                    scaledTileHeight = area.width;
+                    vGap = entity.get_mut<TM::Container::Gap>()->value;
+                    break;
+
+                case Repeat::BOTH:
+                    scaledTileWidth  = sprite.sourceRect.width     * scale.width     * UI_SCALE;
+                    scaledTileHeight = sprite.sourceRect.height    * scale.height    * UI_SCALE;
+
+                    hGap = entity.get_mut<TM::Container::Gap>()->value;
+                    vGap = entity.get_mut<TM::Container::Gap>()->value;
+                    break;
+            }
+        }
+
         Rectangle destRect = {
                 .x = position.x,
                 .y = position.y,
-                .width = area.width,
-                .height = area.height
+                .width  = scaledTileWidth,
+                .height = scaledTileHeight
         };
 
-        if (sprite.repeat) {
-            for (int i = 0; i < SCREEN_WIDTH / destRect.width; i++) {
-                for (int j = 0; j < SCREEN_HEIGHT / destRect.height; j++) {
-                    destRect.x = destRect.width  * static_cast<float>(i);
-                    destRect.y = destRect.height * static_cast<float>(j);
-                    DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
-                }
+        std::cout << std::endl;
+
+        for (int i = 0; i < area.width / destRect.width; i++) {
+            for (int j = 0; j < area.height / destRect.height; j++) {
+                destRect.x = position.x + destRect.width  * static_cast<float>(i);
+                destRect.y = position.y + destRect.height * static_cast<float>(j);
+                DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
             }
-        } else {
-            DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
         }
     }
 
@@ -176,13 +197,11 @@ public:
 
     struct Type {
         UI_ELEMENTS type    = UI_ELEMENTS::UI_INVALID;
-        int id              = 0;
     };
 
     struct Sprite {
         Texture2D*  texture     = nullptr;
         Rectangle   sourceRect  = {0, 0, 0, 0};
-        bool        repeat      = false;
     };
 
     struct Scale {
@@ -205,6 +224,12 @@ public:
         std::vector<VARIANTS> values;
     };
 
-    struct Repeat {};
+    struct Repeat {
+        enum Type {
+            HORIZONTAL,
+            VERTICAL,
+            BOTH
+        } type = BOTH;
+    };
 
 };
