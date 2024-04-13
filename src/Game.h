@@ -28,6 +28,9 @@ public:
 
         world.import<RenderModule>();
         world.import<TransformModule>();
+        // WARNING: import Modules first before creating any scene
+        // because components needs to be registered first time inside the module
+        // instead of the scenes
 
         scene = new MainMenu(world);
 

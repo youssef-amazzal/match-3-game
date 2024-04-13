@@ -12,23 +12,71 @@ void MainMenu::enter() {
 
     hud.changeBgColor(C_BLUE);
 
+     auto Board = world.entity("Board 1")
+                .add<TransformModule::ContainedBy>(sceneEntity)
+                .set<TransformModule::Container>({
+                    .items = {},
+                    .alignment = TransformModule::Container::Alignment::ROW,
+                    .fixed = false
+                })
+                .add<TransformModule::Area>()
+                .set<TransformModule::Relative>({TransformModule::Relative::Alignment::BOTTOM_CENTER})
+                .set<TransformModule::Position, TransformModule::Relative>({0, -100})
+                .with<TransformModule::ContainedBy>([&]{
+                    for (int i = 0; i < 5; i++) {
+                        auto Slot = world.entity()
+                            .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+                            .set<RenderModule::Variants>({.values{ST_CLOSED}})
 
-    auto Slot = world.entity("Gem Slot")
+                            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER})
+                            .set<TransformModule::Position>({100, 100})
+                            .with<TransformModule::ContainedBy>([&]{
+//                                auto Gem = world.entity()
+//                                        .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
+//                                        .set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}})
+//                                        .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
+                            });
+                    }
+                });
+
+//    auto Board = world.entity("Board 1")
+//            .add<TransformModule::ContainedBy>(sceneEntity)
+//            .set<TransformModule::Container>({
+//                .items = {},
+//                .alignment = TransformModule::Container::Alignment::COL_REV,
+//                .fixed = false
+//            })
+//            .add<TransformModule::Area>()
+//            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::BOTTOM_CENTER})
+//            .set<TransformModule::Position, TransformModule::Relative>({0, -100});
+//
+//
+    auto Slot1 = world.entity("Slot1")
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
-            .add<RenderModule::Expand>     ()
-            .add<RenderModule::Animation>  ()
             .set<RenderModule::Variants>({.values{ST_CLOSED}})
-            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER})
-            .set<TransformModule::Position>({100, 100});
 
-    auto Gem = world.entity("Gem")
-            .child_of(Slot)
+            .add<TransformModule::ContainedBy>(Board)
+            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
+
+    auto Gem1 = world.entity("Gem1")
+            .child_of(Slot1)
 
             .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM})
-            .add<RenderModule::Expand>     ()
-            .add<RenderModule::Animation>  ()
-            .set<RenderModule::Variants>({.values{C_GREEN, SH_OVAL}})
+            .set<RenderModule::Variants>({.values{C_RED, SH_HEART}})
+
+            .add<TransformModule::ContainedBy>(Slot1)
             .set<TransformModule::Relative>({TransformModule::Relative::Alignment::CENTER});
+
+    auto NextSloat = world.entity("NextSloat")
+            .set<RenderModule::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+            .set<RenderModule::Variants>({.values{ST_OPEN}})
+            .set<RenderModule::Scale>({2,2})
+
+            .add<TransformModule::ContainedBy>(sceneEntity)
+            .set<TransformModule::Relative>({TransformModule::Relative::Alignment::TOP_LEFT})
+            .set<TransformModule::Position, TransformModule::Relative>({50, 50});
+
+
 }
 
 //================================//

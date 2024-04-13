@@ -37,11 +37,11 @@ struct RenderModule {
                 .each(render);
 
 
-
-
-//        world.system().interval(3).with<Sprite>().each([](flecs::entity entity) {
-//            std::printf("%s: %-10s\n\n", entity.name().c_str(), entity.type().str().c_str());
-//        });
+        world.system().with<Sprite>().each([](flecs::entity entity) {
+            if (IsKeyPressed(KEY_LEFT_ALT)) {
+                std::printf("%s: %-10s\n\n", entity.name().c_str(), entity.type().str().c_str());
+            }
+        });
     }
 
     struct Type;

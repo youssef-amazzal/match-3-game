@@ -4,7 +4,8 @@
 #include "../core/TransformModule.h"
 #include "../core/InputModule.h"
 
-using RD = RenderModule;
+using RM = RenderModule;
+using TM = TransformModule;
 
 struct HUD {
 
@@ -18,18 +19,27 @@ private:
 public:
 
     explicit HUD(flecs::world& world) {
+        // Prefabs
+        world.prefab<Slot>("Slot")
+                .set<RM::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+                .set_override<RM::Variants>({.values{ST_OPEN}})
+                .set_override<TM::Position>({0, 0});
 
+        world.prefab<Board>("Board")
+                .set_override<TM::Position>({0, 0})
+                .set_override<TM::Relative>({TM::Relative::Alignment::BOTTOM_CENTER})
+                .set_override<TM::Position, TM::Relative>({0, -100});
 
         // Prefabs
         bgPattern = new flecs::entity;
         *bgPattern = world.entity("BackgroundPattern")
-                .set<RenderModule::Type>({UI_ELEMENTS::UI_BG_PATTERN})
-                .add<RenderModule::Repeat>()
-                .set<RenderModule::Scale>({5.0f, 5.0f})
-                .set<TransformModule::Position>({0, 0});
+                .set<RM::Type>({UI_ELEMENTS::UI_BG_PATTERN})
+                .add<RM::Repeat>()
+                .set<RM::Scale>({5.0f, 5.0f})
+                .set<TM::Position>({0, 0});
 
         // correction
-        bgPattern->get_mut<RenderModule::Sprite>()->repeat = true;
+        bgPattern->get_mut<RM::Sprite>()->repeat = true;
     }
 
     ~HUD() {
@@ -43,15 +53,18 @@ public:
     }
 
     void changeBgColor(V_COLORS color) {
-        bgPattern->set<RenderModule::Variants>({.values{color}});
+        bgPattern->set<RM::Variants>({.values{color}});
     }
 
-    void buildBoard(flecs::world& world) {
-
-    }
-
-    struct Container {
-
-    };
-
+public:
+    struct Board {};
+    struct Slot {};
+    struct Gem {};
+    struct Button{};
+    struct IconButton{};
+    struct TextButton4{};
+    struct TextButton5{};
+    struct TextButton6{};
+    struct TextButton7{};
+    struct TextButton8{};
 };
