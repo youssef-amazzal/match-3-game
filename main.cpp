@@ -1,7 +1,7 @@
-#include "src/Game.h"
+#include "src/GameCycle.h"
 
 int main() {
-    Game& Game = Game::getInstance();
+    GameCycle& Game = GameCycle::getInstance();
     Game.init();
     Game.run();
     Game.exit();

@@ -5,7 +5,7 @@
 #include "../core/UiModule.h"
 
 class Scene {
-    friend class Game;
+    friend class GameCycle;
 private:
     bool isPlaying           = false;
 

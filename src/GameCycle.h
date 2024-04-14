@@ -4,18 +4,18 @@
 #include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
 
-class Game {
+class GameCycle {
 public:
     flecs::world world;
 private:
     Scene* scene;
 public:
-    Game() = default;
+    GameCycle() = default;
 
-    ~Game() = default;
+    ~GameCycle() = default;
 
-    static Game& getInstance() {
-        static Game instance;
+    static GameCycle& getInstance() {
+        static GameCycle instance;
         return instance;
     }
 
