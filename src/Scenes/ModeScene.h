@@ -2,11 +2,11 @@
 #include "../headers/Header.h"
 #include "Scene.h"
 
-class MainMenu;
+class GameScene;
 
-class GameMode : public Scene {
+class ModeScene : public Scene {
 public:
-    GameMode(flecs::world& world) : Scene(world) {};
+    ModeScene(flecs::world& world) : Scene(world) {};
 
 private:
 

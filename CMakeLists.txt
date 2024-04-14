@@ -60,13 +60,13 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Game.h
         src/core/RenderModule.h
         src/Scenes/Scene.h
-        src/Scenes/MainMenu.h
-        src/Scenes/GameMode.h
-        src/Scenes/GameMode.cpp
-        src/Scenes/MainMenu.cpp
+        src/Scenes/GameScene.h
+        src/Scenes/ModeScene.h
+        src/Scenes/ModeScene.cpp
+        src/Scenes/GameScene.cpp
         src/core/TransformModule.h
         src/core/InputModule.h
-        src/UI/HUD.h
+        src/core/UiModule.h
 
 )
 #set(raylib_VERBOSE 1)

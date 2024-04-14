@@ -2,7 +2,7 @@
 #include "../headers/Header.h"
 #include "../core/RenderModule.h"
 #include "../core/TransformModule.h"
-#include "../UI/HUD.h"
+#include "../core/UiModule.h"
 
 class Scene {
     friend class Game;
@@ -29,12 +29,11 @@ protected:
         sceneEntity
                 .set<RM::Type>({UI_ELEMENTS::UI_BG_PATTERN})
                 .add<RM::Repeat>()
-                .add<TransformModule::Container>()
-                .add<TransformModule::Container::Fixed>()
-                .set<TransformModule::Position>({0,0})
-                ;
-
-        sceneEntity.set<TransformModule::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
+                .add<TM::Container>()
+                .add<TM::Container::Fixed>()
+                .set<TM::Depth>({0})
+                .set<TM::Position>({0,0})
+                .set<TM::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
 
     };
 

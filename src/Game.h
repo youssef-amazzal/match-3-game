@@ -2,7 +2,7 @@
 #include "headers/Header.h"
 #include "utils/ResourceManager.h"
 #include "Scenes/Scene.h"
-#include "Scenes/MainMenu.h"
+#include "Scenes/GameScene.h"
 
 class Game {
 public:
@@ -26,13 +26,14 @@ public:
         // without any further explanation.
         RSC::loadTextures();
 
-        world.import<RenderModule>();
         world.import<TransformModule>();
+        world.import<RenderModule>();
+        world.import<UiModule>();
         // WARNING: import Modules first before creating any scene
         // because components needs to be registered first time inside the module
         // instead of the scenes
 
-        scene = new MainMenu(world);
+        scene = new GameScene(world);
 
     }
 

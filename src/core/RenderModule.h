@@ -3,8 +3,6 @@
 #include "TransformModule.h"
 #include "../utils/ResourceManager.h"
 
-using TM = TransformModule;
-
 struct RenderModule {
 
     explicit RenderModule(flecs::world& world) {
@@ -23,7 +21,7 @@ struct RenderModule {
                 .event(flecs::OnSet).each(initSprite);
 
         world.observer<Sprite, Scale, TM::Area>("UpdateScale")
-                .without<TransformModule::Container::Fixed>()
+                .without<TM::Container::Fixed>()
                 .event(flecs::OnSet).each(updateScale);
 
         world.observer<Type, Sprite, Variants>("ApplyVariant")
@@ -67,16 +65,13 @@ private:
         Sprite* sprite   = entity.get_mut<Sprite>();
 
         TM::Position* position  = entity.get_mut<TM::Position>();
-        TM::Area* area          = entity.get_mut<TM::Area>();
-        TM::Depth* depth        = entity.get_mut<TM::Depth>();
-
+        TM::Area*     area      = entity.get_mut<TM::Area>();
 
         auto data = RSC::getSpriteData(type.type);
         SpriteSheet* sheet  = data.spriteSheet();
 
         sprite->texture      = &sheet->texture;
         sprite->sourceRect   = data.sourceRect();
-        depth->value         = sheet->layer;
 
         *position = {0, 0};
         area->width  = sprite->sourceRect.width   * scale->width  * UI_SCALE;
@@ -99,9 +94,6 @@ private:
         float scaledTileWidth  = area.width;
         float scaledTileHeight = area.height;
         auto hGap = 0, vGap = 0;
-
-        std::cout << std::endl;
-
 
         if (entity.has<Repeat>()) {
             switch (entity.get<Repeat>()->type) {
@@ -135,12 +127,22 @@ private:
                 .height = scaledTileHeight
         };
 
-        std::cout << std::endl;
+        double rows = area.height / destRect.height;
+        double cols = area.width / destRect.width;
 
-        for (int i = 0; i < area.width / destRect.width; i++) {
-            for (int j = 0; j < area.height / destRect.height; j++) {
-                destRect.x = position.x + destRect.width  * static_cast<float>(i);
-                destRect.y = position.y + destRect.height * static_cast<float>(j);
+        // Special case for background
+        if (entity.name() == "Scene") {
+            rows = ceil(rows);
+            cols = ceil(cols);
+        } else {
+            rows = floor(rows);
+            cols = floor(cols);
+        }
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                destRect.x = position.x + destRect.width  * static_cast<float>(j);
+                destRect.y = position.y + destRect.height * static_cast<float>(i);
                 DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
             }
         }
@@ -233,3 +235,5 @@ public:
     };
 
 };
+
+using RM = RenderModule;
