@@ -8,47 +8,6 @@
 
 void GameScene::enter() {
 
-
-     world.entity()
-        .is_a<UI::HBox>()
-
-        .add<TM::ContainedBy>(sceneEntity)
-        .set<TM::Relative>({TM::Relative::Alignment::BOTTOM_CENTER})
-        .set<TM::Position, TM::Relative>({0, -100})
-
-        .with<TransformModule::ContainedBy>([&]{
-            for (int i = 0; i < 15; i++) {
-                world.entity().is_a<UI::PSlot>()
-                    .set<RM::Variants>({{ST_SELECTED}});
-            }
-        });
-
-    world.entity("NextSloat")
-        .is_a<UI::PSlot>()
-        .set<RM::Variants>({{ST_SELECTED}})
-        .set<RM::Scale>({2,2})
-
-        .add<TM::ContainedBy>(sceneEntity)
-        .set<TM::Relative>({TM::Relative::Alignment::TOP_LEFT})
-        .set<TM::Position, TM::Relative>({50, 50});
-
-    world.entity("Inventory")
-        .is_a<UI::VBox>()
-        .set<TM::Container::Gap>({5})
-
-        .add<TM::ContainedBy>(sceneEntity)
-        .set<TM::Relative>({TM::Relative::Alignment::CENTER_RIGHT})
-        .set<TM::Position, TM::Relative>({-30, -50})
-
-        .with<TransformModule::ContainedBy>([&] {
-            for (int i = 0; i < 5; i++) {
-                world.entity().is_a<UI::PSlot>()
-                    .set<RM::Variants>({{ST_OPEN}});
-            }
-        });
-
-
-
 }
 
 //================================//
@@ -57,6 +16,14 @@ void GameScene::enter() {
 
 Scene* GameScene::update() {
     DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
+
+    if (IsKeyPressed(KEY_RIGHT)) {
+        board->push_back(V_COLORS::C_RED, V_SHAPES::SH_DIAMOND);
+    }
+
+    if (IsKeyPressed(KEY_LEFT)) {
+        board->push_front(V_COLORS::C_BLUE, V_SHAPES::SH_DIAMOND);
+    }
 
     world.progress();
 

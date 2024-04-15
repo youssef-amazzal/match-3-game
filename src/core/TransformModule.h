@@ -4,6 +4,8 @@
 struct TransformModule {
 
     explicit TransformModule(flecs::world& world) {
+
+        // Components
         world.component<Position>    ("Position");
         world.component<Relative>    ("Relative");
         world.component<Area>        ("Area");
@@ -22,6 +24,13 @@ struct TransformModule {
                 .add(flecs::With, Alignment)
                 .add(flecs::With, Gap);
 
+        // Prefabs
+        world.prefab<PPhysical>("P:Physical")
+                .set_override<Position>({0, 0})
+                .set_override<Area>({0, 0})
+                .set_override<Depth>({1});
+
+
         world.observer("OnAdd:ContainedBy")
                 .with<ContainedBy>()
                 .term_at(1).second(flecs::Wildcard)
@@ -33,7 +42,7 @@ struct TransformModule {
 
                     if (box) {
                         auto content = box.add<Container>().get_mut<Container::Content>();
-                        content->items.push_back(static_cast<const flecs::id>(entity.id()));
+                        content->items.push_back(entity);
                     }
                 });
 
@@ -196,6 +205,9 @@ private:
     }
 
 public:
+    //===================================//
+    //            Components             //
+    //===================================//
     struct Position {
         float x = 0;
         float y = 0;
@@ -213,10 +225,9 @@ public:
         Alignment alignment;
     };
 
-
     struct Container {
         struct Content {
-            std::vector<flecs::id> items;
+            std::vector<flecs::entity> items;
         };
         
         struct Alignment {
@@ -250,6 +261,10 @@ public:
         float angle;
     };
 
+    //===================================//
+    //              Prefabs              //
+    //===================================//
+    struct PPhysical {};
 
 };
 

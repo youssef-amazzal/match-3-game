@@ -3,12 +3,13 @@
 #include "utils/ResourceManager.h"
 #include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
+#include "core/MatchModule.h"
 
 class GameCycle {
 public:
     flecs::world world;
 private:
-    Scene* scene;
+    Scene* scene = nullptr;
 public:
     GameCycle() = default;
 
@@ -29,6 +30,7 @@ public:
         world.import<TransformModule>();
         world.import<RenderModule>();
         world.import<UiModule>();
+        world.import<MatchModule>();
         // WARNING: import Modules first before creating any scene
         // because components needs to be registered first time inside the module
         // instead of the scenes

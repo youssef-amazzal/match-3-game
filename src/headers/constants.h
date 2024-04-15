@@ -3,7 +3,7 @@
 
 #define SCREEN_WIDTH    1200
 #define SCREEN_HEIGHT   736
-#define FRAME_RATE      60
+#define FRAME_RATE      600
 #define TILE_SIZE       16
 #define UI_SCALE        1
 

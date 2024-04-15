@@ -66,6 +66,14 @@ add_executable(${PROJECT_NAME} main.cpp
         src/core/TransformModule.h
         src/core/InputModule.h
         src/core/UiModule.h
+        src/core/MatchModule.h
+        src/core/MatchModule.h
+        src/Match-3/Board.h
+        src/Match-3/Gem.h
+        src/Match-3/Slot.h
+        src/Match-3/Button.h
+        src/Match-3/Inventory.h
+        src/Match-3/Previewer.h
 
 )
 #set(raylib_VERBOSE 1)
