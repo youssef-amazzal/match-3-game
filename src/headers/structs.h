@@ -2,6 +2,7 @@
 
 template <typename T>
 struct SingleLinkedList {
+
 private:
     struct Node {
         T data;
@@ -98,6 +99,12 @@ public:
 
             size++;
         }
+    }
+
+
+
+    int getSize() {
+        return size;
     }
 };
 
@@ -214,6 +221,10 @@ public:
 
             size++;
         }
+    }
+
+    int getSize() {
+        return size;
     }
 };
 

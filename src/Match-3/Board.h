@@ -32,28 +32,28 @@ public:
         return this->get_mut<TM::Container::Content>()->items;
     }
 
-    Board& push_back(V_COLORS color, V_SHAPES shape) {
+    Board& push_back(const Gem& newGem) {
         Slot slot = Slot(world(), ST_SELECTED);
         getSlots().push_back(slot);
 
-        Gem gem = Gem(slot, color, shape);
+        Gem gem = Gem(world(), newGem).setContainer(slot);
 
         this->mainList.push_back(gem);
-        subLists[color].push_back(gem);
-        subLists[shape].push_back(gem);
+        subLists[gem.getColor()].push_back(gem);
+        subLists[gem.getShape()].push_back(gem);
 
         return *this;
     }
 
-    Board& push_front(V_COLORS color, V_SHAPES shape) {
+    Board& push_front(const Gem& newGem) {
         Slot slot = Slot(world(), ST_SELECTED);
         getSlots().insert(getSlots().begin(), slot);
 
-        Gem gem = Gem(slot, color, shape);
+        Gem gem = Gem(world(), newGem).setContainer(slot);
 
         this->mainList.push_front(gem);
-        subLists[color].push_front(gem);
-        subLists[shape].push_front(gem);
+        subLists[gem.getColor()].push_front(gem);
+        subLists[gem.getShape()].push_front(gem);
 
         return *this;
     }

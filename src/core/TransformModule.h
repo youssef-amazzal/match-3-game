@@ -46,6 +46,25 @@ struct TransformModule {
                     }
                 });
 
+        world.observer("OnRemove:ContainedBy")
+                .with<ContainedBy>()
+                .term_at(1).second(flecs::Wildcard)
+                .event(flecs::OnRemove)
+                .each([](flecs::entity entity) {
+
+                    auto box = entity.target<ContainedBy>();
+
+                    entity.remove(flecs::ChildOf, box);
+
+                    if (box) {
+                        auto content = box.get_mut<Container::Content>();
+                        auto it = std::find(content->items.begin(), content->items.end(), entity);
+                        if (it != content->items.end()) {
+                            content->items.erase(it);
+                        }
+                    }
+                });
+
         world.system("UpdateChildPosition").with<Container>().each(updateChildPosition);
 
         world.system<Position, Area>("PrintEntities").each([](flecs::entity entity, Position& pos, Area& area) {
@@ -244,9 +263,7 @@ public:
         };
     };
 
-    struct ContainedBy {
-        int index;
-    };
+    struct ContainedBy {};
 
     struct Area {
         float width;

@@ -4,6 +4,11 @@
 
 struct Slot : public flecs::entity {
 
+    Slot(const flecs::world& world, const flecs::id id) : flecs::entity(world, id) {}
+    Slot(const flecs::world& world, const flecs::entity entity) : flecs::entity(world, entity) {}
+
+    Slot(const Slot& slot) : flecs::entity(slot) {}
+
     explicit Slot(const flecs::world& world, VARIANTS variant) : flecs::entity(world) {
 
         this->is_a<TM::PPhysical>()
@@ -14,5 +19,6 @@ struct Slot : public flecs::entity {
 
             .set<TM::Depth>({2});
 
+        this->set_name(("Slot" + std::to_string(this->id())).c_str());
     }
 };
