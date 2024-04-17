@@ -31,6 +31,8 @@ Scene* GameScene::update() {
         return new ModeScene(world);
     }
 
+    board->handleGemMatching();
+
     return nullptr;
 }
 

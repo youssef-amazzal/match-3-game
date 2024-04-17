@@ -7,13 +7,15 @@ private:
     struct Node {
         T data;
         Node* next;
+
+        explicit Node(const T& data) : data(data), next(nullptr) {}
     };
 
     Node* head;
-    int size;
+    int count;
 
 public:
-    SingleLinkedList() : head(nullptr), size(0) {}
+    SingleLinkedList() : head(nullptr), count(0) {}
 
     ~SingleLinkedList() {
         Node* current = head;
@@ -24,9 +26,8 @@ public:
         }
     }
 
-    void push_back(T data) {
-        Node* node = new Node();
-        node->data = data;
+    void push_back(const T& data) {
+        Node* node = new Node(data);
         node->next = nullptr;
 
         if (head == nullptr) {
@@ -39,19 +40,18 @@ public:
             current->next = node;
         }
 
-        size++;
+        count++;
     }
 
-    void push_front(T data) {
-        Node* node = new Node();
-        node->data = data;
+    void push_front(const T& data) {
+        Node* node = new Node(data);
         node->next = head;
         head = node;
-        size++;
+        count++;
     }
 
     void pop_back() {
-        if (size == 0) return;
+        if (count == 0) return;
 
         Node* current = head;
         Node* prev = nullptr;
@@ -66,28 +66,27 @@ public:
             head = nullptr;
         }
 
-        size--;
+        count--;
     }
 
     void pop_front() {
-        if (size == 0) return;
+        if (count == 0) return;
 
         Node* node = head;
         head = head->next;
         delete node;
-        size--;
+        count--;
     }
 
-    void insert(int index, T data) {
-        if (index < 0 || index > size) return;
+    void insert(int index, const T& data) {
+        if (index < 0 || index > count) return;
 
         if (index == 0) {
             push_front(data);
-        } else if (index == size) {
+        } else if (index == count) {
             push_back(data);
         } else {
-            Node* node = new Node();
-            node->data = data;
+            Node* node = new Node(data);
 
             Node* current = head;
             for (int i = 0; i < index - 1; i++) {
@@ -97,14 +96,54 @@ public:
             node->next = current->next;
             current->next = node;
 
-            size++;
+            count++;
         }
     }
 
+    int size() {
+        return count;
+    }
 
+    Node* get(int index) {
+        if (index < 0 || index >= count) return nullptr;
 
-    int getSize() {
-        return size;
+        Node* current = head;
+        for (int i = 0; i < index; i++) {
+            current = current->next;
+        }
+
+        return current;
+    }
+
+    void remove(int index) {
+        if (index < 0 || index >= count) return;
+
+        if (index == 0) {
+            pop_front();
+        } else {
+            Node* current = head;
+            for (int i = 0; i < index - 1; i++) {
+                current = current->next;
+            }
+
+            Node* node = current->next;
+            current->next = node->next;
+            delete node;
+
+            count--;
+        }
+    }
+
+    Node* front() {
+        return head;
+    }
+
+    Node* back() {
+        Node* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        return current;
     }
 };
 
@@ -117,14 +156,16 @@ private:
         T data;
         Node* next;
         Node* prev;
+
+        explicit Node(const T& data) : data(data), next(nullptr), prev(nullptr) {}
     };
 
     Node* head;
     Node* tail;
-    int size;
+    int count;
 
 public:
-    DoubleLinkedList() : head(nullptr), tail(nullptr), size(0) {}
+    DoubleLinkedList() : head(nullptr), tail(nullptr), count(0) {}
 
     ~DoubleLinkedList() {
         Node* current = head;
@@ -135,9 +176,8 @@ public:
         }
     }
 
-    void push_back(T data) {
-        Node* node = new Node();
-        node->data = data;
+    void push_back(const T& data) {
+        Node* node = new Node(data);
         node->next = nullptr;
         node->prev = tail;
 
@@ -148,12 +188,11 @@ public:
         }
         tail = node;
 
-        size++;
+        count++;
     }
 
-    void push_front(T data) {
-        Node* node = new Node();
-        node->data = data;
+    void push_front(const T& data) {
+        Node* node = new Node(data);
         node->next = head;
         node->prev = nullptr;
 
@@ -165,11 +204,11 @@ public:
             tail = node;
         }
 
-        size++;
+        count++;
     }
 
     void pop_back() {
-        if (size == 0) return;
+        if (count == 0) return;
 
         Node* node = tail;
         tail = tail->prev;
@@ -180,11 +219,11 @@ public:
         }
         delete node;
 
-        size--;
+        count--;
     }
 
     void pop_front() {
-        if (size == 0) return;
+        if (count == 0) return;
 
         Node* node = head;
         head = head->next;
@@ -195,19 +234,18 @@ public:
         }
         delete node;
 
-        size--;
+        count--;
     }
 
-    void insert(int index, T data) {
-        if (index < 0 || index > size) return;
+    void insert(int index, const T& data) {
+        if (index < 0 || index > count) return;
 
         if (index == 0) {
             push_front(data);
-        } else if (index == size) {
+        } else if (index == count) {
             push_back(data);
         } else {
-            Node* node = new Node();
-            node->data = data;
+            Node* node = new Node(data);
 
             Node* current = head;
             for (int i = 0; i < index; i++) {
@@ -219,12 +257,56 @@ public:
             current->prev->next = node;
             current->prev = node;
 
-            size++;
+            count++;
         }
     }
 
-    int getSize() {
-        return size;
+    int size() {
+        return count;
+    }
+
+    Node* get(int index) {
+        if (index < 0 || index >= count) return nullptr;
+
+        Node* current = head;
+        for (int i = 0; i < index; i++) {
+            current = current->next;
+        }
+
+        return current;
+    }
+
+    void remove(int index) {
+        if (index < 0 || index >= count) return;
+
+        if (index == 0) {
+            pop_front();
+        } else if (index == count - 1) {
+            pop_back();
+        } else {
+            Node* current = head;
+            for (int i = 0; i < index; i++) {
+                current = current->next;
+            }
+
+            current->prev->next = current->next;
+            current->next->prev = current->prev;
+            delete current;
+
+            count--;
+        }
+    }
+
+    Node* front() {
+        return head;
+    }
+
+    Node* back() {
+        return tail;
+    }
+
+    void shiftLeft() {
+        if (head && head->next) head = head->next;
     }
 };
 

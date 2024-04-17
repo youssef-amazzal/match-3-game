@@ -13,9 +13,12 @@ struct Previewer : public flecs::entity {
     {
 
         this->is_a<UI::HBox>()
+
             .add<TM::ContainedBy>(container)
-            .set<TM::Relative>({TM::Relative::Alignment::TOP_LEFT})
-            .set<TM::Position, TM::Relative>({50, 50})
+            .set<TM::Relative>({TM::Relative::Alignment::TOP_CENTER})
+            .set<TM::Position, TM::Relative>({0, 50})
+
+            .set<TM::Container::Alignment>({TM::Container::Alignment::Type::COL_REV})
             .with<TM::ContainedBy>([&]{
                 for (int i = 0; i < nbPreviews; i++) {
                     Slot(world(), ST_CLOSED)

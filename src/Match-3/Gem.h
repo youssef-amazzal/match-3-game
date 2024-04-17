@@ -1,14 +1,9 @@
 #pragma once
 #include "../headers/Header.h"
 #include "../core/UiModule.h"
+#include "../core/MatchModule.h"
 
 struct Gem : public flecs::entity {
-
-
-    struct Match {
-        V_COLORS color = V_COLORS::C_GRAY;
-        V_SHAPES shape = V_SHAPES::SH_DIAMOND;
-    };
 
     Gem(const flecs::world& world, const flecs::id id) : flecs::entity(world, id) {};
     Gem(const flecs::world& world, const flecs::entity entity) : flecs::entity(world, entity) {}
@@ -25,7 +20,7 @@ struct Gem : public flecs::entity {
                 .set<TM::Depth>({3})
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
 
-                .set<Match>({color, shape});
+                .set<MM::Match>({color, shape});
 
         this->set_name(("Gem" + std::to_string(this->id())).c_str());
     }
@@ -41,23 +36,23 @@ struct Gem : public flecs::entity {
     }
 
     Gem& setColor(V_COLORS color) {
-        this->set<Match>({color, this->get<Match>()->shape})
-                .set<RM::Variants>({{color, this->get<Match>()->shape}});
+        this->set<MM::Match>({color, this->get<MM::Match>()->shape})
+                .set<RM::Variants>({{color, this->get<MM::Match>()->shape}});
         return *this;
     }
 
     Gem& setShape(V_SHAPES shape) {
-        this->set<Match>({this->get<Match>()->color, shape})
-                .set<RM::Variants>({{this->get<Match>()->color, shape}});
+        this->set<MM::Match>({this->get<MM::Match>()->color, shape})
+                .set<RM::Variants>({{this->get<MM::Match>()->color, shape}});
         return *this;
     }
 
     V_COLORS getColor() {
-        return this->get<Match>()->color;
+        return this->get<MM::Match>()->color;
     }
 
     V_SHAPES getShape() {
-        return this->get<Match>()->shape;
+        return this->get<MM::Match>()->shape;
     }
 
 };
