@@ -55,4 +55,44 @@ struct Gem : public flecs::entity {
         return this->get<MM::Match>()->shape;
     }
 
+    bool operator==(const Gem& gem) {
+        return this->id() == gem.id();
+    }
+
+    auto toString() {
+        std::string color, shape;
+
+        switch (getColor()) {
+            case C_RED:
+                color = "Red(" + std::to_string(getColor()) + ")";
+                break;
+            case C_BLUE:
+                color = "Blue(" + std::to_string(getColor()) + ")";
+                break;
+            case C_GREEN:
+                color = "Green(" + std::to_string(getColor()) + ")";
+                break;
+            case C_YELLOW:
+                color = "Yellow(" + std::to_string(getColor()) + ")";
+                break;
+        }
+
+        switch (getShape()) {
+            case SH_DIAMOND:
+                shape = "Diamond(" + std::to_string(getShape()) + ")";
+                break;
+            case SH_KITE:
+                shape = "Kite(" + std::to_string(getShape()) + ")";
+                break;
+            case SH_ROUND:
+                shape = "Round(" + std::to_string(getShape()) + ")";
+                break;
+            case SH_TRIANGLE:
+                shape = "Triangle(" + std::to_string(getShape()) + ")";
+                break;
+        }
+
+        return std::string("(" + color + ", " + shape + ")");
+    }
+
 };

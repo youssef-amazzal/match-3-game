@@ -16,6 +16,7 @@ using json = nlohmann::json;
 #include <vector>
 #include <unordered_map>
 #include <set>
+#include <list>
 #include <filesystem>
 namespace   FileSys = std::filesystem;
 using       Path    = FileSys::path;

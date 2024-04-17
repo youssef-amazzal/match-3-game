@@ -15,7 +15,12 @@ public:
     explicit GameScene(flecs::world& world) : Scene(world) {
         board = new Board(sceneEntity);
         inventory = new Inventory(sceneEntity, 5);
-        previewer = new Previewer(sceneEntity, 3, {C_RED, C_BLUE, C_YELLOW, C_GREEN}, {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE});
+        previewer = new Previewer(
+                sceneEntity,
+                3,
+                {C_GREEN},
+                {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
+            );
     };
 
     ~GameScene() override {

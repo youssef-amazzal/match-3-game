@@ -18,26 +18,27 @@ public:
     SingleLinkedList() : head(nullptr), count(0) {}
 
     ~SingleLinkedList() {
-        Node* current = head;
-        while (current != nullptr) {
-            Node* next = current->next;
-            delete current;
-            current = next;
+        if (head != nullptr) {
+            Node* current = head;
+            do {
+                Node* next = current->next;
+                delete current;
+                current = next;
+            } while (current != head);
         }
     }
 
     void push_back(const T& data) {
         Node* node = new Node(data);
-        node->next = nullptr;
 
         if (head == nullptr) {
             head = node;
+            node->next = node;
         } else {
-            Node* current = head;
-            while (current->next != nullptr) {
-                current = current->next;
-            }
-            current->next = node;
+            Node* last = back();
+
+            node->next = head;
+            last->next = node;
         }
 
         count++;
@@ -45,26 +46,35 @@ public:
 
     void push_front(const T& data) {
         Node* node = new Node(data);
-        node->next = head;
-        head = node;
+
+        if (head == nullptr) {
+            head = node;
+            node->next = node;
+        } else {
+            Node* last = back();
+
+            node->next = head;
+            head = node;
+            last->next = head;
+        }
+
         count++;
     }
 
     void pop_back() {
         if (count == 0) return;
 
-        Node* current = head;
-        Node* prev = nullptr;
-        while (current->next != nullptr) {
-            prev = current;
-            current = current->next;
-        }
-        delete current;
-        if (prev != nullptr) {
-            prev->next = nullptr;
-        } else {
+        Node* last = back();
+        if (head == last) {
             head = nullptr;
+        } else {
+            Node* current = head;
+            while (current->next != last) {
+                current = current->next;
+            }
+            current->next = head;
         }
+        delete last;
 
         count--;
     }
@@ -72,66 +82,56 @@ public:
     void pop_front() {
         if (count == 0) return;
 
-        Node* node = head;
-        head = head->next;
-        delete node;
-        count--;
-    }
-
-    void insert(int index, const T& data) {
-        if (index < 0 || index > count) return;
-
-        if (index == 0) {
-            push_front(data);
-        } else if (index == count) {
-            push_back(data);
+        Node* last = back();
+        if (head == last) {
+            head = nullptr;
         } else {
-            Node* node = new Node(data);
-
-            Node* current = head;
-            for (int i = 0; i < index - 1; i++) {
-                current = current->next;
-            }
-
-            node->next = current->next;
-            current->next = node;
-
-            count++;
+            head = head->next;
+            last->next = head;
         }
+
+        count--;
     }
 
     int size() {
         return count;
     }
 
-    Node* get(int index) {
-        if (index < 0 || index >= count) return nullptr;
+//    Node* get(int index) {
+//        if (index < 0 || index >= count) return nullptr;
+//
+//        Node* current = head;
+//        for (int i = 0; i < index; i++) {
+//            current = current->next;
+//        }
+//
+//        return current;
+//    }
+
+    void remove(const T& data) {
+        if (head == nullptr) return;
 
         Node* current = head;
-        for (int i = 0; i < index; i++) {
-            current = current->next;
-        }
-
-        return current;
-    }
-
-    void remove(int index) {
-        if (index < 0 || index >= count) return;
-
-        if (index == 0) {
-            pop_front();
-        } else {
-            Node* current = head;
-            for (int i = 0; i < index - 1; i++) {
-                current = current->next;
+        Node* prev = nullptr;
+        do {
+            if (current->data == data) {
+                if (prev == nullptr) {
+                    if (current->next == head) { // Check if head is the only node in the list
+                        head = nullptr;
+                    } else {
+                        head = current->next;
+                    }
+                } else {
+                    prev->next = current->next;
+                }
+                delete current;
+                count--;
+                return;
             }
 
-            Node* node = current->next;
-            current->next = node->next;
-            delete node;
-
-            count--;
-        }
+            prev = current;
+            current = current->next;
+        } while (current != head);
     }
 
     Node* front() {
@@ -139,8 +139,10 @@ public:
     }
 
     Node* back() {
+        if (head == nullptr) return nullptr;
+
         Node* current = head;
-        while (current->next != nullptr) {
+        while (current->next != head) {
             current = current->next;
         }
         return current;
@@ -161,63 +163,56 @@ private:
     };
 
     Node* head;
-    Node* tail;
     int count;
 
 public:
-    DoubleLinkedList() : head(nullptr), tail(nullptr), count(0) {}
+    DoubleLinkedList() : head(nullptr), count(0) {}
 
     ~DoubleLinkedList() {
-        Node* current = head;
-        while (current != nullptr) {
-            Node* next = current->next;
-            delete current;
-            current = next;
+        if (head != nullptr) {
+            Node* current = head;
+            do {
+                Node* next = current->next;
+                delete current;
+                current = next;
+            } while (current != head);
         }
     }
 
     void push_back(const T& data) {
         Node* node = new Node(data);
-        node->next = nullptr;
-        node->prev = tail;
 
         if (head == nullptr) {
             head = node;
+            node->next = node->prev = node;
         } else {
-            tail->next = node;
+            Node* last = head->prev;
+
+            node->next = head;
+            node->prev = last;
+
+            last->next = head->prev = node;
         }
-        tail = node;
 
         count++;
     }
 
     void push_front(const T& data) {
-        Node* node = new Node(data);
-        node->next = head;
-        node->prev = nullptr;
-
-        if (head != nullptr) {
-            head->prev = node;
-        }
-        head = node;
-        if (tail == nullptr) {
-            tail = node;
-        }
-
-        count++;
+        push_back(data);
+        head = head->prev;
     }
 
     void pop_back() {
         if (count == 0) return;
 
-        Node* node = tail;
-        tail = tail->prev;
-        if (tail != nullptr) {
-            tail->next = nullptr;
-        } else {
+        Node* last = head->prev;
+        if (head == last) {
             head = nullptr;
+        } else {
+            head->prev = last->prev;
+            last->prev->next = head;
         }
-        delete node;
+        delete last;
 
         count--;
     }
@@ -225,76 +220,61 @@ public:
     void pop_front() {
         if (count == 0) return;
 
-        Node* node = head;
-        head = head->next;
-        if (head != nullptr) {
-            head->prev = nullptr;
+        Node* next = head->next;
+        if (head == next) {
+            next = nullptr;
         } else {
-            tail = nullptr;
+            next->prev = head->prev;
+            head->prev->next = next;
         }
-        delete node;
+        delete head;
+        head = next;
 
         count--;
     }
 
-    void insert(int index, const T& data) {
-        if (index < 0 || index > count) return;
-
-        if (index == 0) {
-            push_front(data);
-        } else if (index == count) {
-            push_back(data);
-        } else {
-            Node* node = new Node(data);
-
-            Node* current = head;
-            for (int i = 0; i < index; i++) {
-                current = current->next;
-            }
-
-            node->next = current;
-            node->prev = current->prev;
-            current->prev->next = node;
-            current->prev = node;
-
-            count++;
-        }
-    }
 
     int size() {
         return count;
     }
 
-    Node* get(int index) {
-        if (index < 0 || index >= count) return nullptr;
+//    Node* get(int index) {
+//        if (index < 0 || index >= count) return nullptr;
+//
+//        Node* current = head;
+//        for (int i = 0; i < index; i++) {
+//            current = current->next;
+//        }
+//
+//        return current;
+//    }
+
+    void remove(const T& data) {
+        if (head == nullptr) return;
 
         Node* current = head;
-        for (int i = 0; i < index; i++) {
-            current = current->next;
-        }
+        do {
+            if (current->data == data) {
+                if (current == head) {
+                    if (current->next == head) { // Check if head is the only node in the list
+                        head = nullptr;
+                    } else {
+                        head = current->next;
+                    }
+                }
 
-        return current;
-    }
+                if (head != nullptr) { // Only update links if head is not null
+                    current->prev->next = current->next;
+                    current->next->prev = current->prev;
+                }
 
-    void remove(int index) {
-        if (index < 0 || index >= count) return;
-
-        if (index == 0) {
-            pop_front();
-        } else if (index == count - 1) {
-            pop_back();
-        } else {
-            Node* current = head;
-            for (int i = 0; i < index; i++) {
-                current = current->next;
+                delete current;
+                count--;
+                return;
             }
 
-            current->prev->next = current->next;
-            current->next->prev = current->prev;
-            delete current;
-
-            count--;
-        }
+            current = current->next;
+        } while (current != head);
     }
 
     Node* front() {
@@ -302,11 +282,11 @@ public:
     }
 
     Node* back() {
-        return tail;
+        return head ? head->prev : nullptr;
     }
 
     void shiftLeft() {
-        if (head && head->next) head = head->next;
+        if (head) head = head->next;
     }
 };
 
