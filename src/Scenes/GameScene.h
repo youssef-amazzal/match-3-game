@@ -18,7 +18,7 @@ public:
         previewer = new Previewer(
                 sceneEntity,
                 3,
-                {C_GREEN},
+                {C_RED, C_BLUE, C_YELLOW, C_GREEN},
                 {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
             );
     };

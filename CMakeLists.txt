@@ -50,7 +50,6 @@ endif()
 # Our Project
 
 add_executable(${PROJECT_NAME} main.cpp
-        src/headers/structs.h
         src/headers/enums.h
         src/headers/constants.h
         src/headers/libs.h
@@ -74,6 +73,7 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Match-3/Button.h
         src/Match-3/Inventory.h
         src/Match-3/Previewer.h
+        src/Match-3/LinkedList.h
 
 )
 #set(raylib_VERBOSE 1)
