@@ -1,22 +1,13 @@
 #pragma once
 #include "../headers/Header.h"
-#include "TransformModule.h"
-#include "RenderModule.h"
-#include "UiModule.h"
-#include "../core/UiModule.h"
 
 struct MatchModule {
+    explicit MatchModule(flecs::world& world) {}
 
-    explicit MatchModule(flecs::world& world) {
-        world.import<TransformModule>();
-        world.import<RenderModule>();
+    //====================================//
+    //              Components            //
+    //====================================//
 
-    }
-
-private:
-
-
-public:
     struct Score {
         int score = 10;
     };

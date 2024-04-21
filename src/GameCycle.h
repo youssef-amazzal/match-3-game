@@ -29,6 +29,7 @@ public:
 
         world.import<TransformModule>();
         world.import<RenderModule>();
+        world.import<AnimationModule>();
         world.import<UiModule>();
         world.import<MatchModule>();
         // WARNING: import Modules first before creating any scene

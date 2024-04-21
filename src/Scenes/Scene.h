@@ -4,7 +4,6 @@
 
 class Scene {
     friend class GameCycle;
-private:
     bool isPlaying           = false;
 
     // this is where any actions that needs to be done every time the scene is played are done

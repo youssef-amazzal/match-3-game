@@ -77,6 +77,11 @@ add_executable(${PROJECT_NAME} main.cpp
         src/core/AnimationModule.h
         src/Match-3/Background.h
         src/core/AnimationModule.cpp
+        src/Match-3/Label.h
+        src/Match-3/Label.h
+        src/core/RenderModule.cpp
+        src/core/TransformModule.cpp
+        src/core/UiModule.cpp
 
 )
 #set(raylib_VERBOSE 1)

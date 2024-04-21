@@ -1,5 +1,7 @@
 #pragma once
 #include "../headers/Header.h"
+#include "../core/TransformModule.h"
+#include "../core/RenderModule.h"
 
 struct Background : public flecs::entity {
 

@@ -4,7 +4,7 @@
 
 
 struct AnimationModule {
-    explicit AnimationModule(const flecs::world& world);
+    explicit AnimationModule(flecs::world& world);
 
     //===================================//
     //             Components            //

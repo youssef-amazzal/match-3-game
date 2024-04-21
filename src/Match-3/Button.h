@@ -1,7 +1,6 @@
 #pragma once
-#include "../headers/Header.h"
 
-struct  Button : public flecs::entity  {
+struct Button : public flecs::entity  {
 
     explicit Button(flecs::entity& container, V_COLORS color = C_GREEN) : flecs::entity(container.world()) {
         this->is_a<TM::PPhysical>()
@@ -10,7 +9,7 @@ struct  Button : public flecs::entity  {
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
                 // .set<TM::Position, TM::Relative>({0, -100})
 
-        .set<TM::Depth>({3})
+                .set<TM::Depth>({3})
 
                 .set<RM::Type>({UI_ELEMENTS::UI_BUTTON})
                 .set<RM::Variants>({{color}})
