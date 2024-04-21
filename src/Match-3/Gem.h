@@ -1,6 +1,5 @@
 #pragma once
 #include "../headers/Header.h"
-#include "../core/UiModule.h"
 #include "../core/MatchModule.h"
 
 struct Gem : public flecs::entity {
@@ -8,7 +7,7 @@ struct Gem : public flecs::entity {
     Gem(const flecs::world& world, const flecs::id id) : flecs::entity(world, id) {};
     Gem(const flecs::world& world, const flecs::entity entity) : flecs::entity(world, entity) {}
 
-    Gem(const Gem& gem) : flecs::entity(gem) {}
+    Gem(const Gem& gem) = default;
 
     Gem(const flecs::world& world, V_COLORS color, V_SHAPES shape) : flecs::entity(world) {
         this->is_a<TM::PPhysical>()

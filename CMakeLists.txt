@@ -74,6 +74,9 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Match-3/Inventory.h
         src/Match-3/Previewer.h
         src/Match-3/LinkedList.h
+        src/core/AnimationModule.h
+        src/Match-3/Background.h
+        src/core/AnimationModule.cpp
 
 )
 #set(raylib_VERBOSE 1)

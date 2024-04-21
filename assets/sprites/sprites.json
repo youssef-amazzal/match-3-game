@@ -70,7 +70,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [120]
           }
         ],
@@ -111,7 +111,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [2]
           }
         ],
@@ -204,7 +204,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [4]
           }
         ],
@@ -213,7 +213,7 @@
             "type": "Text",
             "values": [
               {"name": "Rate", "idStep": 0
-  
+
   },
               {"name": "Shop", "idStep": 120},
               {"name": "Yes", "idStep": 132},
@@ -269,7 +269,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [8]
           }
         ],
@@ -316,7 +316,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [8]
           }
         ],
@@ -362,7 +362,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [8]
           }
         ],
@@ -409,7 +409,7 @@
             "frames": [0]
           },
           {
-            "type": "pressed",
+            "type": "press",
             "frames": [8]
           }
         ],

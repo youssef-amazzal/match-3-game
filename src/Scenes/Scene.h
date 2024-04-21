@@ -1,8 +1,6 @@
 #pragma once
 #include "../headers/Header.h"
-#include "../core/RenderModule.h"
 #include "../core/TransformModule.h"
-#include "../core/UiModule.h"
 
 class Scene {
     friend class GameCycle;
@@ -24,18 +22,12 @@ protected:
     flecs::entity prevScope;
 
     explicit Scene(flecs::world& world) : world(world), sceneEntity(world.entity("Scene")), prevScope(world.set_scope(sceneEntity)) {
-        world.set_scope(sceneEntity);
-
         sceneEntity
-                .set<RM::Type>({UI_ELEMENTS::UI_BG_PATTERN})
-                .add<RM::Repeat>()
                 .add<TM::Container>()
                 .add<TM::Container::Fixed>()
-                .set<TM::Depth>({0})
                 .set<TM::Position>({0,0})
                 .set<TM::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
-
-    };
+    }
 
 public:
     virtual ~Scene() {

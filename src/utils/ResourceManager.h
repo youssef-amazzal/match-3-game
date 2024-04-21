@@ -51,9 +51,6 @@ using map_variants  = std::unordered_map<VARIANTS, int>;
 using map_animation = std::unordered_map<ANIMATIONS, std::vector<int>>;
 
 struct SpriteData {
-    friend class ResourceManager;
-    friend class RenderModule;
-private:
     SPRITES_SHEETS  source  = SPRITES_SHEETS::SP_INVALID;
     UI_ELEMENTS     type    = UI_ELEMENTS::UI_INVALID;
     int             id;
@@ -64,58 +61,10 @@ private:
     map_animation   animations;
     map_variants    variants;
 
-public:
-
-    int getId() {
-        return id;
-    }
-
     SpriteSheet* spriteSheet() {
         return RSC::spriteSheets[source].get();
     }
 
-    Rectangle sourceRect(std::vector<VARIANTS> variants) {
-        int actualId = id;
-        for (auto & variant : variants) {
-            actualId += getIdStep(variant);
-        }
-
-        // Global Data
-        auto spriteSheet = RSC::spriteSheets[source];
-        auto nbCol       = spriteSheet->columns;
-        auto tileWidth   = spriteSheet->tileWidth;
-        auto tileHeight  = spriteSheet->tileHeight;
-
-        Rectangle rect = {
-                .x = tileWidth   * static_cast<float>(actualId % nbCol),
-                .y = tileHeight  * static_cast<float>(actualId / nbCol),
-                .width  = width  * tileWidth,
-                .height = height * tileHeight
-        };
-
-        return rect;
-    }
-
-    Rectangle sourceRect() {
-        int actualId = id;
-
-        // Global Data
-        auto spriteSheet = RSC::spriteSheets[source];
-        auto nbCol       = spriteSheet->columns;
-        auto tileWidth   = spriteSheet->tileWidth;
-        auto tileHeight  = spriteSheet->tileHeight;
-
-        Rectangle rect = {
-                .x = tileWidth   * static_cast<float>(actualId % nbCol),
-                .y = tileHeight  * static_cast<float>(actualId / nbCol),
-                .width  = width  * tileWidth,
-                .height = height * tileHeight
-        };
-
-        return rect;
-    }
-
-private:
     int getIdStep(VARIANTS variant) {
         auto idStep = variants.find(variant);
         if (idStep == variants.end()) return 0;

@@ -1,4 +1,5 @@
 #pragma once
+#include "AnimationModule.h"
 #include "../headers/Header.h"
 #include "TransformModule.h"
 #include "../utils/ResourceManager.h"
@@ -7,26 +8,18 @@ struct RenderModule {
 
     explicit RenderModule(flecs::world& world) {
         world.import<TransformModule>();
-
-        world.component<Sprite>     ("Sprite");
-        world.component<Animation>  ("Animation");
-        world.component<Expand>     ("Expand");
-        world.component<Variants>   ("Variants");
-        world.component<Type>       ("Type");
-        world.component<Scale>      ("Scale");
-        world.component<Repeat>     ("Repeat");
-
+        world.import<AnimationModule>();
 
         world.observer<Type>("InitSprite")
                 .event(flecs::OnSet).each(initSprite);
 
-        world.observer<Sprite, Scale, TM::Area>("UpdateScale")
-                .without<TM::Container::Fixed>()
-                .event(flecs::OnSet).each(updateScale);
+        world.system<Type, Sprite, Variants, AM::Frame>("updateSourceRect")
+                .term_at(4).second<AM::Animation>()
+                .kind(flecs::PreStore).each(updateSourceRect);
 
-        world.observer<Type, Sprite, Variants>("ApplyVariant")
-                .event(flecs::OnSet).each(applyVariant);
-
+        world.system<Sprite, Scale, TM::Area>("UpdateScale")
+               .without<TM::Container::Fixed>()
+               .kind(flecs::PreStore).each(updateScale);
 
         world.system<Sprite, Scale, TM::Area, const TM::Position, const TM::Depth>("Render")
                 .order_by<TM::Depth>([](flecs::entity_t e1, const TM::Depth* d1, flecs::entity_t e2, const TM::Depth* d2) {
@@ -35,19 +28,18 @@ struct RenderModule {
                 .kind(flecs::OnStore)
                 .each(render);
 
-
-        world.system().with<Sprite>().each([](flecs::entity entity) {
-            if (IsKeyPressed(KEY_LEFT_ALT)) {
-                std::printf("%s: %-10s\n\n", entity.name().c_str(), entity.type().str().c_str());
-            }
-        });
+        // world.system("PrintDebugInfo")
+        //     .with<Sprite>()
+        //     .each([](flecs::entity entity) {
+        //         if (IsKeyPressed(KEY_LEFT_ALT)) {
+        //             std::printf("%s: %-10s\n\n", entity.name().c_str(), entity.type().str().c_str());
+        //         }
+        //     });
     }
 
     struct Type;
     struct Sprite;
     struct Scale;
-    struct Animation;
-    struct Expand;
     struct Variants;
     struct Repeat;
 
@@ -61,19 +53,24 @@ private:
 
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
-        Scale*  scale    = entity.get_mut<Scale>();
-        Sprite* sprite   = entity.get_mut<Sprite>();
+        Scale*     scale        = entity.get_mut<Scale>();
+        Sprite*    sprite       = entity.get_mut<Sprite>();
+        Variants*  variants     = entity.get_mut<Variants>();
+        AM::Frame* animation    = entity.get_mut<AM::Frame, AM::Animation>();
+        auto*      state        = entity.get_mut<AM::Animation::State>();
 
         TM::Position* position  = entity.get_mut<TM::Position>();
         TM::Area*     area      = entity.get_mut<TM::Area>();
 
-        auto data = RSC::getSpriteData(type.type);
+        auto data           = RSC::getSpriteData(type.type);
         SpriteSheet* sheet  = data.spriteSheet();
 
         sprite->texture      = &sheet->texture;
-        sprite->sourceRect   = data.sourceRect();
+        sprite->originId     = data.id;
+        animation->frames    = data.animations[state->state];
 
-        *position = {0, 0};
+        sprite->sourceRect   = buildSourceRect(entity, type, *sprite, *variants, *animation);
+
         area->width  = sprite->sourceRect.width   * scale->width  * UI_SCALE;
         area->height = sprite->sourceRect.height  * scale->height * UI_SCALE;
     }
@@ -83,11 +80,11 @@ private:
         area.height = sprite.sourceRect.height   * scale.height   * UI_SCALE;
     }
 
-    static void applyVariant(Type& type, Sprite& sprite, Variants& variants) {
+    static void updateSourceRect(flecs::entity entity, Type& type, Sprite& sprite, Variants& variants, AM::Frame& animation) {
         if (type.type == UI_ELEMENTS::UI_INVALID) return;
 
         auto data = RSC::getSpriteData(type.type);
-        sprite.sourceRect = data.sourceRect(variants.values);
+        sprite.sourceRect = buildSourceRect(entity, type, sprite, variants, animation);
     }
 
     static void render(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
@@ -148,52 +145,36 @@ private:
         }
     }
 
-    static void renderWithExpansion(Type& type, Sprite& sprite, Expand& expand, const Scale* scale, TM::Area& area, TM::Position& position) {
-        if (type.type == UI_ELEMENTS::UI_INVALID) return;
+    //===================================//
+    //             Helpers               //
+    //===================================//
 
+    static Rectangle buildSourceRect(flecs::entity entity, const Type type, const Sprite& sprite, const Variants& variants, const AM::Frame& animation) {
         auto data = RSC::getSpriteData(type.type);
-        Rectangle sourceRect = sprite.sourceRect;
 
-        auto vExpandTiles = data.vExpandTiles;
-        auto hExpandTiles = data.hExpandTiles;
-
-        int hRepeat = expand.hExpand;
-        int vRepeat = expand.vExpand;
-
-        float x = position.x;
-        float y = position.y;
-
-        float rWidth  = data.width;
-        float rHeight = data.height;
-
-        float absWidth  = sprite.sourceRect.width   * scale->width  * UI_SCALE;
-        float absHeight = sprite.sourceRect.height  * scale->height * UI_SCALE;
-
-        float tileWidth     = sourceRect.width / rWidth;
-        float tileHeight    = sourceRect.height / rHeight;
-        float absTileWidth  = absWidth / rWidth;
-        float absTileHeight = absHeight / rHeight;
-
-        for (int i = 0; i < rHeight; i++) {
-            for (int j = 0; j < rWidth; j++) {
-                Rectangle tileSource = {
-                        .x = sourceRect.x + tileWidth * static_cast<float>(j),
-                        .y = sourceRect.y + tileHeight * static_cast<float>(i),
-                        .width = sourceRect.width / rWidth,
-                        .height = sourceRect.height / rHeight
-                };
-
-                Rectangle tileDest = {
-                        .x = x + absTileWidth * static_cast<float>(j),
-                        .y = y + absTileHeight * static_cast<float>(i),
-                        .width = absWidth / rWidth,
-                        .height = absHeight / rHeight
-                };
-            }
+        int actualId = sprite.originId;
+        for (auto& variant : variants.values) {
+            actualId += data.getIdStep(variant);
         }
 
-    }
+        actualId += animation.frames[animation.currentFrame];
 
+        // Global Data
+        const SpriteSheet* spriteSheet = data.spriteSheet();
+
+        int   nbCol       = spriteSheet->columns;
+        float tileWidth   = spriteSheet->tileWidth;
+        float tileHeight  = spriteSheet->tileHeight;
+
+        Rectangle rect = {
+            .x = tileWidth   * static_cast<float>(actualId % nbCol),
+            .y = tileHeight  * static_cast<float>(actualId / nbCol),
+            .width  = data.width  * tileWidth,
+            .height = data.height * tileHeight
+        };
+
+        return rect;
+    }
 
 public:
 
@@ -204,6 +185,7 @@ public:
     struct Sprite {
         Texture2D*  texture     = nullptr;
         Rectangle   sourceRect  = {0, 0, 0, 0};
+        int originId = 0;
     };
 
     struct Scale {
@@ -211,19 +193,8 @@ public:
         float height = 1.0f;
     };
 
-    struct Animation {
-        ANIMATIONS       state = ANIMATIONS::IDLE;
-        std::vector<int> frames{};
-        int              currentFrame = 0;
-    };
-
-    struct Expand {
-        int hExpand = 1;
-        int vExpand = 1;
-    };
-
     struct Variants {
-        std::vector<VARIANTS> values;
+        std::vector<VARIANTS> values = {};
     };
 
     struct Repeat {

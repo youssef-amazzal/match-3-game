@@ -6,20 +6,15 @@ struct TransformModule {
     explicit TransformModule(flecs::world& world) {
 
         // Components
-        world.component<Position>    ("Position");
-        world.component<Relative>    ("Relative");
-        world.component<Area>        ("Area");
-        world.component<Depth>       ("Depth");
-        world.component<Rotation>    ("Rotation");
-        world.component<ContainedBy> ("ContainedBy")
+        world.component<ContainedBy>()
                 .add(flecs::Exclusive)
                 .add(flecs::OnDeleteTarget, flecs::Delete);
 
-        auto Alignment = world.component<Container::Alignment>   ("ContainerAlignment");
-        auto Content = world.component<Container::Content>     ("ContainerContent");
-        auto Gap = world.component<Container::Gap>         ("ContainerGap");
-        world.component<Container::Fixed>       ("ContainerFixed");
-        world.component<Container>              ("Container")
+        auto Alignment = world.component<Container::Alignment>();
+        auto Content = world.component<Container::Content>();
+        auto Gap = world.component<Container::Gap>();
+        world.component<Container::Fixed>();
+        world.component<Container>()
                 .add(flecs::With, Content)
                 .add(flecs::With, Alignment)
                 .add(flecs::With, Gap);
@@ -241,7 +236,7 @@ public:
             BOTTOM_LEFT,    BOTTOM_CENTER,  BOTTOM_RIGHT
         };
 
-        Alignment alignment;
+        Alignment alignment = Alignment::TOP_LEFT;
     };
 
     struct Container {

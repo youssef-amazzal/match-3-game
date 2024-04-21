@@ -30,8 +30,6 @@ void GameScene::enter() {
 //================================//
 
 Scene* GameScene::update() {
-    DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
-
     if (IsKeyPressed(KEY_RIGHT)) {
         board->push_back(previewer->pop());
     }
@@ -57,6 +55,9 @@ Scene* GameScene::update() {
     }
 
     board->handleGemMatching();
+
+//    DrawTextPro(Font "SCORE", 20, 20, 40, DARKGREEN);
+
 
     return nullptr;
 }

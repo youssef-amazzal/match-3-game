@@ -3,21 +3,16 @@
 
 struct InputModule {
 
-        explicit InputModule(flecs::world& world) {
-            world.component<Mouse>("Mouse");
-            world.component<Keyboard>("Keyboard");
+    explicit InputModule(flecs::world& world) {
 
-//            world.set<Mouse>({}); // Singleton
-        }
-
-        struct Mouse;
-        struct Keyboard;
+    }
 
 private:
 
 
 public:
+    struct KeyPress{};
+    struct KeyRelease{};
 
-        struct Mouse {};
-        struct Keyboard {};
+
 };
