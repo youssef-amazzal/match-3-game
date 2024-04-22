@@ -1,5 +1,4 @@
 #include "RenderModule.h"
-
 #include "../utils/ResourceManager.h"
 
 
@@ -24,6 +23,13 @@ RM::RenderModule(flecs::world& world) {
             })
             .kind(flecs::OnStore)
             .each(render);
+
+    world.system<Text, const TM::Position, const TM::Depth>("RenderText")
+            .order_by<TM::Depth>([](flecs::entity_t e1, const TM::Depth* d1, flecs::entity_t e2, const TM::Depth* d2) {
+                return d1->value - d2->value; // Ascending
+            })
+            .kind(flecs::OnStore)
+            .each(renderText);
 }
 
 //====================================//
@@ -112,7 +118,7 @@ void RM::render(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& ar
         double cols = area.width / destRect.width;
 
         // Special case for background
-        if (entity.name() == "Scene") {
+        if (entity.name().contains("Scene") || entity.name().contains("Background")) {
             rows = ceil(rows);
             cols = ceil(cols);
         } else {
@@ -127,6 +133,17 @@ void RM::render(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& ar
                 DrawTexturePro(*sprite.texture, sprite.sourceRect, destRect, {0, 0}, 0, WHITE);
             }
         }
+}
+
+void RM::renderText(flecs::entity entity, Text& text, const TM::Position& position, const TM::Depth& depth) {
+    DrawTextEx(
+        GetFontDefault(),
+        text.text,
+        {position.x, position.y},
+        text.fontSize * UI_SCALE,
+        text.spacing,
+        WHITE
+    );
 }
 
 

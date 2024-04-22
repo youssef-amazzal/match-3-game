@@ -5,7 +5,6 @@ struct TransformModule {
 
     explicit TransformModule(flecs::world& world);
 
-public:
     //===================================//
     //            Components             //
     //===================================//

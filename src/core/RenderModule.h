@@ -38,6 +38,12 @@ struct RenderModule {
         } type = BOTH;
     };
 
+    struct Text {
+        const char* text;
+        float fontSize;
+        float spacing;
+    };
+
 private:
     //====================================//
     //             Observers              //
@@ -63,6 +69,11 @@ private:
         const TM::Position& position    , const TM::Depth& depth
     );
 
+    static void renderText(
+        flecs::entity entity            , Text& text,
+        const TM::Position& position    , const TM::Depth& depth
+    );
+
     //===================================//
     //             Helpers               //
     //===================================//
@@ -71,7 +82,6 @@ private:
         const Type& type             , const Sprite& sprite,
         const Variants& variants    , const AM::Frame& animation
     );
-
 
 };
 

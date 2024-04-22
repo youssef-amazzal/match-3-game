@@ -4,6 +4,7 @@
 #include "Scenes/Scene.h"
 #include "Scenes/GameScene.h"
 #include "core/MatchModule.h"
+#include "Scenes/TitleScene.h"
 
 class GameCycle {
 public:
@@ -36,8 +37,7 @@ public:
         // because components needs to be registered first time inside the module
         // instead of the scenes
 
-        scene = new GameScene(world);
-
+        scene = new TitleScene(world);
     }
 
     void run() {

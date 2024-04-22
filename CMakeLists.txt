@@ -82,6 +82,12 @@ add_executable(${PROJECT_NAME} main.cpp
         src/core/RenderModule.cpp
         src/core/TransformModule.cpp
         src/core/UiModule.cpp
+        src/Scenes/TitleScene.cpp
+        src/Scenes/TitleScene.h
+        src/Scenes/Leaderboard.cpp
+        src/Scenes/Leaderboard.h
+        src/Scenes/SaveMenu.cpp
+        src/Scenes/SaveMenu.h
 
 )
 #set(raylib_VERBOSE 1)

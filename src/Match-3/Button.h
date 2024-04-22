@@ -1,19 +1,36 @@
+#include <utility>
+
 #pragma once
 
 struct Button : public flecs::entity  {
 
-    explicit Button(flecs::entity& container, V_COLORS color = C_GREEN) : flecs::entity(container.world()) {
+    explicit Button(flecs::entity& container, UI_ELEMENTS type, std::vector<VARIANTS> variants, RM::Scale scale) : flecs::entity(container.world()) {
         this->is_a<TM::PPhysical>()
+
+                .set<RM::Type>({type})
+                .set<RM::Variants>({std::move(variants)})
+                .set<RM::Scale>(scale)
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
                 // .set<TM::Position, TM::Relative>({0, -100})
 
-                .set<TM::Depth>({3})
+                .set<TM::Depth>({3});
 
+
+    }
+
+    explicit Button(flecs::entity& container, RM::Scale scale,  V_COLORS color = C_GREEN) : flecs::entity(container.world()) {
+        this->is_a<TM::PPhysical>()
                 .set<RM::Type>({UI_ELEMENTS::UI_BUTTON})
                 .set<RM::Variants>({{color}})
-                .set<RM::Scale>({2.4, 2.4});
+                .set<RM::Scale>({2.4, 2.4})
+
+                .add<TM::ContainedBy>(container)
+                .set<TM::Relative>({TM::Relative::Alignment::CENTER})
+                // .set<TM::Position, TM::Relative>({0, -100})
+
+                .set<TM::Depth>({3});
 
 
         this->set_name(("Button" + std::to_string(this->id())).c_str());

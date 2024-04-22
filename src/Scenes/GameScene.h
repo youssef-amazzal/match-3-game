@@ -5,17 +5,17 @@
 #include "../Match-3/Board.h"
 #include "../Match-3/Previewer.h"
 #include "../Match-3/Inventory.h"
-#include "../Match-3/Button.h"
-
+#include "../Match-3/Label.h"
 
 
 class GameScene : public Scene {
-public:
     Background* background = nullptr;
     Board*      board      = nullptr;
     Inventory*  inventory  = nullptr;
     Previewer*  previewer  = nullptr;
+    Label*      scoreLabel = nullptr;
 
+public:
     explicit GameScene(flecs::world& world) : Scene(world) {
         background  = new Background(sceneEntity, C_GREEN);
         board       = new Board(sceneEntity);
@@ -26,13 +26,15 @@ public:
                         {C_RED, C_BLUE, C_YELLOW, C_GREEN},
                         {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
                      );
-    };
+        scoreLabel = new Label(sceneEntity,"999", 200, 10);
+    }
 
     ~GameScene() override {
         delete background;
         delete board;
         delete inventory;
         delete previewer;
+        delete scoreLabel;
     }
 
 private:

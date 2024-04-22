@@ -1,6 +1,6 @@
 #include "ModeScene.h"
 #include "GameScene.h"
-
+#include "TitleScene.h"
 
 
 void ModeScene::enter() {
@@ -11,7 +11,7 @@ Scene* ModeScene::update() {
     world.progress();
 
     if (IsKeyPressed(KEY_SPACE)) {
-        return new GameScene(world);
+        return new TitleScene(world);
     }
 
     return nullptr;

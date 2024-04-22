@@ -12,12 +12,6 @@ struct UiModule {
     //====================================//
     struct HBox {};
     struct VBox {};
-    struct Text {
-        const char* text;
-        float fontSize;
-        float spacing;
-    };
-
 };
 
 using UI = UiModule;
