@@ -17,32 +17,32 @@ class TitleScene : public Scene {
 
 public:
     explicit TitleScene(flecs::world& world) : Scene(world) {
-        background  = new Background(sceneEntity, C_GREEN);
+        background  = new Background(sceneEntity, C_BLUE);
 
-        auto buttonContainer = world.entity()
+        auto buttonContainer = world.entity("buttonContainer")
             .is_a<UI::VBox>()
             .add<TM::ContainedBy>(sceneEntity)
             .set<TM::Relative>({TM::Relative::Alignment::CENTER});
 
-        auto subContainer = world.entity().is_a<UI::HBox>();
+        auto subContainer = world.entity("subContainer").is_a<UI::HBox>();
 
-        newGameButton       = new Button(subContainer, UI_BUTTON,        {C_GREEN}, {2.4, 2.4});
-        loadGameButton      = new Button(subContainer, UI_BUTTON,        {C_GREEN}, {2.4, 2.4});
-        LeaderboardButton   = new Button(subContainer, UI_ICON_BUTTON,   {IC_LEADERBOARD}, {2.4, 2.4});
-        AchievementsButton  = new Button(subContainer, UI_ICON_BUTTON,   {IC_ACHIEVEMENT}, {2.4, 2.4});
-        CloseButton         = new Button(subContainer, UI_TEXT_BUTTON_4, {TXT_QUIT}, {2.4, 2.4});
+        newGameButton       = new Button(buttonContainer, "New Game", 7, {3, 3});
+        loadGameButton      = new Button(buttonContainer, "Load Game", 7, {3, 3});
+        LeaderboardButton   = new Button(subContainer, UI_ICON_BUTTON,   {IC_LEADERBOARD}, {3, 3});
+        AchievementsButton  = new Button(subContainer, UI_ICON_BUTTON,   {IC_ACHIEVEMENT}, {3, 3});
+        CloseButton         = new Button(subContainer, "Close", 3, {3, 3}, C_RED);
 
-        newGameButton->setContainer(buttonContainer);
-        loadGameButton->setContainer(buttonContainer);
         subContainer.add<TM::ContainedBy>(buttonContainer);
-        LeaderboardButton->setContainer(subContainer);
-        AchievementsButton->setContainer(subContainer);
-        CloseButton->setContainer(subContainer);
 
     }
 
     ~TitleScene() override {
         delete background;
+        delete newGameButton;
+        delete loadGameButton;
+        delete LeaderboardButton;
+        delete AchievementsButton;
+        delete CloseButton;
     }
 
 private:

@@ -44,6 +44,11 @@ struct RenderModule {
         float spacing;
     };
 
+    struct Expandable {
+        int horizontal;
+        int vertical;
+    };
+
 private:
     //====================================//
     //             Observers              //
@@ -56,7 +61,7 @@ private:
     //===================================//
 
 
-    static void updateScale(Sprite& sprite, Scale& scale, TM::Area& area);
+    static void updateScale(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& area);
 
     static void updateSourceRect(
         Type& type              , Sprite& sprite,
@@ -64,7 +69,8 @@ private:
     );
 
     static void render(
-        flecs::entity entity            , Sprite& sprite,
+        flecs::entity entity            ,
+        Type& type                      ,Sprite& sprite,
         Scale& scale                    , TM::Area& area,
         const TM::Position& position    , const TM::Depth& depth
     );
@@ -82,6 +88,8 @@ private:
         const Type& type             , const Sprite& sprite,
         const Variants& variants    , const AM::Frame& animation
     );
+
+    static void renderExpandableTiles(flecs::entity entity, Rectangle destRect);
 
 };
 

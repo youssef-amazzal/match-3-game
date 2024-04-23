@@ -10,6 +10,7 @@ struct Background : public flecs::entity {
         this->is_a<TM::PPhysical>()
             .add<TM::ContainedBy>(container)
             .set<RM::Type>({UI_BG_PATTERN})
+            .set<RM::Variants>({{color}})
             .add<RM::Repeat>()
 
             .set<TM::Area>({SCREEN_WIDTH + 100, SCREEN_HEIGHT + 100})

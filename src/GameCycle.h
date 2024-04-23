@@ -58,7 +58,7 @@ public:
             EndDrawing();
         }
     }
-    static void exit() {
+    void exit() {
         CloseWindow();
     }
 
