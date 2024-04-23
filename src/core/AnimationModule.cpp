@@ -1,4 +1,5 @@
 #include "AnimationModule.h"
+#include "InputModule.h"
 #include "RenderModule.h"
 #include "../utils/ResourceManager.h"
 
@@ -23,6 +24,9 @@ AM::AnimationModule(flecs::world& world) {
         .term_at(1).second<Animation>()
         .kind(flecs::PreStore)
         .each(updateLinear);
+
+    world.system<IM::Mouse>("UpdateInteractivity")
+        .each(updateInteractivity);
 }
 
 void AM::updateFrame(Frame& frame) {
@@ -66,4 +70,16 @@ void AM::updateLinear(Linear& linear, TM::Position& position) {
         position.x = linear.start.x;
         position.y = linear.start.y;
     }
+}
+
+void AM::updateInteractivity(flecs::entity entity, const IM::Mouse mouse) {
+    ANIMATIONS state = ANIMATIONS::IDLE;
+
+    // std::cout << entity.name() << std::endl;
+
+    if (mouse.isHovered)      state = ANIMATIONS::HOVER;
+    if (mouse.isLeftPressed)  state = ANIMATIONS::PRESS;
+    if (mouse.isRightPressed) state = ANIMATIONS::PRESS;
+
+    entity.set<Animation::State>({state});
 }

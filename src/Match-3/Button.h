@@ -1,5 +1,6 @@
 #pragma once
 #include "Label.h"
+#include "../core/InputModule.h"
 
 struct Button : public flecs::entity  {
 
@@ -11,6 +12,8 @@ struct Button : public flecs::entity  {
                 .set<RM::Variants>({{color}})
                 .set<RM::Expandable>({width, 1})
                 .set<RM::Scale>(scale)
+
+                .add<IM::Mouse>()
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
@@ -29,6 +32,8 @@ struct Button : public flecs::entity  {
                 .set<RM::Type>({type})
                 .set<RM::Variants>({std::move(variants)})
                 .set<RM::Scale>(scale)
+
+                .add<IM::Mouse>()
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})

@@ -29,6 +29,7 @@ public:
         RSC::loadTextures();
 
         world.import<TransformModule>();
+        world.import<InputModule>();
         world.import<RenderModule>();
         world.import<AnimationModule>();
         world.import<UiModule>();

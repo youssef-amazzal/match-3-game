@@ -1,4 +1,5 @@
 #pragma once
+#include "InputModule.h"
 #include "../headers/Header.h"
 #include "TransformModule.h"
 
@@ -37,6 +38,7 @@ private:
 
     static void updateFrame(Frame& frame);
     static void updateLinear(Linear& linear, TM::Position& position);
+    static void updateInteractivity(flecs::entity entity, IM::Mouse mouse);
 };
 
 using AM = AnimationModule;
