@@ -4,6 +4,6 @@ int main() {
     GameCycle& Game = GameCycle::getInstance();
     Game.init();
     Game.run();
-    Game.exit();
+    Game.close();
     return 0;
 }

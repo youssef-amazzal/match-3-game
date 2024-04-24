@@ -10,9 +10,9 @@ class TitleScene : public Scene {
     Background* background      = nullptr;
     Button* newGameButton       = nullptr;
     Button* loadGameButton      = nullptr;
-    Button* LeaderboardButton   = nullptr;
-    Button* AchievementsButton  = nullptr;
-    Button* CloseButton         = nullptr;
+    Button* leaderboardButton   = nullptr;
+    Button* achievementsButton  = nullptr;
+    Button* closeButton         = nullptr;
 
 
 public:
@@ -22,9 +22,9 @@ public:
         delete background;
         delete newGameButton;
         delete loadGameButton;
-        delete LeaderboardButton;
-        delete AchievementsButton;
-        delete CloseButton;
+        delete leaderboardButton;
+        delete achievementsButton;
+        delete closeButton;
     }
 
 private:

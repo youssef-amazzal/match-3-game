@@ -70,6 +70,10 @@
             "frames": [0]
           },
           {
+            "type": "hover",
+            "frames": [0]
+          },
+          {
             "type": "press",
             "frames": [120]
           }

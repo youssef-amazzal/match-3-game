@@ -2,7 +2,6 @@
 #include "headers/Header.h"
 #include "utils/ResourceManager.h"
 #include "Scenes/Scene.h"
-#include "Scenes/GameScene.h"
 #include "core/MatchModule.h"
 #include "Scenes/TitleScene.h"
 
@@ -10,7 +9,8 @@ class GameCycle {
 public:
     flecs::world world;
 private:
-    Scene* scene = nullptr;
+    Scene*  scene = nullptr;
+    bool    shouldExitCycle = false;
 public:
     GameCycle() = default;
 
@@ -43,7 +43,7 @@ public:
 
     void run() {
 
-        while (!WindowShouldClose()) {
+        while (!shouldExitCycle && !WindowShouldClose()) {
             BeginDrawing();
 
                 ClearBackground(RAYWHITE);
@@ -59,10 +59,13 @@ public:
             EndDrawing();
         }
     }
-    void exit() {
+    void close() {
         CloseWindow();
     }
 
+    void setShouldExit (const bool shouldExit) {
+        this->shouldExitCycle = shouldExit;
+    }
 
 };
 

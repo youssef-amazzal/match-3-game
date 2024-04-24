@@ -14,6 +14,8 @@ struct InputModule {
         bool isHovered      = false;
         bool isLeftPressed  = false;
         bool isRightPressed = false;
+        bool isLeftReleased = false;
+        bool isRightReleased = false;
     };
 
     struct Keyboard{};
@@ -21,18 +23,20 @@ struct InputModule {
 private:
     static void updateMouseData(flecs::entity entity, Mouse& mouse, const TM::Position& position, const TM::Area& area) {
         Vector2 curPos = GetMousePosition();
-
-        mouse = {false, false, false};
+        mouse = {false, false, false, false, false};
 
         if (
             curPos.x >= position.x && curPos.x <= position.x + area.width &&
             curPos.y >= position.y && curPos.y <= position.y + area.height
         ) {
             mouse.isHovered = true;
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) mouse.isLeftPressed   = true;
-            if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) mouse.isRightPressed = true;
-        }
 
+            mouse.isLeftPressed = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+            mouse.isRightPressed = IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+            mouse.isLeftReleased = IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
+            mouse.isRightReleased = IsMouseButtonReleased(MOUSE_BUTTON_RIGHT);
+
+        }
     }
 };
 

@@ -21,7 +21,7 @@ struct Button : public flecs::entity  {
 
                 .set<TM::Depth>({3});
 
-        Label(container, text, 20, 5).setContainer(*this);
+        Label(container, text, 35, 5).setContainer(*this);
 
         this->set_name(("Button" + std::to_string(this->id())).c_str());
     }
@@ -70,8 +70,15 @@ struct Button : public flecs::entity  {
         return *this;
     }
 
-    bool isPressed() {
-        auto mouse = this->get_mut<IM::Mouse>();
-        return mouse->isLeftPressed || mouse->isRightPressed;
+    bool isPressed() const {
+        return this->get_mut<IM::Mouse>()->isLeftPressed || this->get_mut<IM::Mouse>()->isRightPressed;
+    }
+
+    bool isHovered() const {
+        return this->get_mut<IM::Mouse>()->isHovered;
+    }
+
+    bool isClicked() const {
+        return this->get_mut<IM::Mouse>()->isLeftReleased || this->get_mut<IM::Mouse>()->isRightReleased;
     }
 };

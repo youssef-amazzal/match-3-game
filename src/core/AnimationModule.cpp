@@ -76,9 +76,6 @@ void AM::updateLinear(Linear& linear, TM::Position& position) {
 void AM::updateInteractivity(flecs::entity entity, const IM::Mouse mouse) {
     ANIMATIONS state = ANIMATIONS::IDLE;
 
-    // std::cout << entity.name() << std::endl;
-
-    if (mouse.isHovered)      state = ANIMATIONS::HOVER;
     if (mouse.isLeftPressed)  state = ANIMATIONS::PRESS;
     if (mouse.isRightPressed) state = ANIMATIONS::PRESS;
 
