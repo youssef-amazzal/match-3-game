@@ -13,7 +13,7 @@ struct Button : public flecs::entity  {
                 .set<RM::Expandable>({width, 1})
                 .set<RM::Scale>(scale)
 
-                .add<IM::Mouse>()
+                .set<IM::Mouse>({false, false, false})
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
@@ -48,7 +48,7 @@ struct Button : public flecs::entity  {
         this->is_a<TM::PPhysical>()
                 .set<RM::Type>({UI_ELEMENTS::UI_BUTTON})
                 .set<RM::Variants>({{color}})
-                .set<RM::Scale>({2.4, 2.4})
+                .set<RM::Scale>(scale)
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
@@ -70,13 +70,8 @@ struct Button : public flecs::entity  {
         return *this;
     }
 
-    Button& press() {
-        this->set<AM::Animation::State>({ANIMATIONS::PRESS});
-        return *this;
-    }
-
-    Button& idle() {
-        this->set<AM::Animation::State>({ANIMATIONS::IDLE});
-        return *this;
+    bool isPressed() {
+        auto mouse = this->get_mut<IM::Mouse>();
+        return mouse->isLeftPressed || mouse->isRightPressed;
     }
 };

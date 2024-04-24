@@ -4,6 +4,7 @@
 #include "../utils/ResourceManager.h"
 
 AM::AnimationModule(flecs::world& world) {
+    world.import<InputModule>();
     world.import<TransformModule>();
     world.observer<RM::Type, Animation::State>("OnSet:AnimationState")
             .event(flecs::OnSet).each([](flecs::entity entity, RM::Type& type, Animation::State& state) {

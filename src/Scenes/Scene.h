@@ -17,21 +17,18 @@ class Scene {
 
 protected:
     flecs::world& world;
-    flecs::entity sceneEntity;
-    flecs::entity prevScope;
+    flecs::entity* sceneEntity;
+    flecs::entity* prevScope;
 
-    explicit Scene(flecs::world& world) : world(world), sceneEntity(world.entity("Scene")), prevScope(world.set_scope(sceneEntity)) {
-        sceneEntity
-                .add<TM::Container>()
-                .add<TM::Container::Fixed>()
-                .set<TM::Position>({0,0})
-                .set<TM::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
-    }
+    explicit Scene(flecs::world& world) : world(world) {}
 
 public:
     virtual ~Scene() {
-        world.set_scope(prevScope);
-        sceneEntity.destruct();
+        world.set_scope(*prevScope);
+        sceneEntity->destruct();
+
+        delete sceneEntity;
+        delete prevScope;
     };
 
 
@@ -40,9 +37,17 @@ public:
 
         if (!isPlaying) {
             isPlaying = true;
-            // scope the world to the scene so that all entities created in the scene are children of the scene
-            enter();
 
+            sceneEntity = new flecs::entity(world, "Scene");
+            prevScope   = new flecs::entity(world.set_scope(*sceneEntity));
+
+            sceneEntity
+                ->add<TM::Container>()
+                .add<TM::Container::Fixed>()
+                .set<TM::Position>({0,0})
+                .set<TM::Area>({SCREEN_WIDTH, SCREEN_HEIGHT});
+
+            enter();
         }
 
 

@@ -5,7 +5,7 @@
 
 struct Background : public flecs::entity {
 
-    explicit Background(flecs::entity& container, V_COLORS color) : flecs::entity(container.world()) {
+    explicit Background(entity& container, V_COLORS color) : entity(container.world()) {
 
         this->is_a<TM::PPhysical>()
             .add<TM::ContainedBy>(container)

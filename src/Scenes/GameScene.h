@@ -16,18 +16,7 @@ class GameScene : public Scene {
     Label*      scoreLabel = nullptr;
 
 public:
-    explicit GameScene(flecs::world& world) : Scene(world) {
-        background  = new Background(sceneEntity, C_GREEN);
-        board       = new Board(sceneEntity);
-        inventory   = new Inventory(sceneEntity, 5);
-        previewer   = new Previewer(
-                        sceneEntity,
-                        3,
-                        {C_RED, C_BLUE, C_YELLOW, C_GREEN},
-                        {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
-                     );
-        scoreLabel = new Label(sceneEntity,"999", 200, 10);
-    }
+    explicit GameScene(flecs::world& world) : Scene(world) {}
 
     ~GameScene() override {
         delete background;

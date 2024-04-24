@@ -7,22 +7,16 @@
 //================================//
 
 void GameScene::enter() {
-//    //shapes: diamond, triangle, round, kite
-//    //colors: red, blue, yellow, green
-//    // DR, TY, DG, RR, DB, TG
-//
-//    Gem gems[] = {
-//            Gem(world, C_RED, SH_DIAMOND),
-//            Gem(world, C_YELLOW, SH_TRIANGLE),
-//            Gem(world, C_GREEN, SH_DIAMOND),
-//            Gem(world, C_RED, SH_ROUND),
-//            Gem(world, C_BLUE, SH_DIAMOND),
-//            Gem(world, C_GREEN, SH_TRIANGLE),
-//    };
-//
-//    for (auto & gem : gems) {
-//        board->push_back(gem);
-//    }
+    background  = new Background(*sceneEntity, C_GREEN);
+    board       = new Board(*sceneEntity);
+    inventory   = new Inventory(*sceneEntity, 5);
+    previewer   = new Previewer(
+                    *sceneEntity,
+                    3,
+                    {C_RED, C_BLUE, C_YELLOW, C_GREEN},
+                    {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
+                 );
+    scoreLabel = new Label(*sceneEntity,"999", 200, 10);
 }
 
 //================================//

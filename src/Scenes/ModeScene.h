@@ -6,7 +6,7 @@ class GameScene;
 
 class ModeScene : public Scene {
 public:
-    ModeScene(flecs::world& world) : Scene(world) {};
+    explicit ModeScene(flecs::world& world) : Scene(world) {};
 
 private:
 

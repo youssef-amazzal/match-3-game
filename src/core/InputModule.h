@@ -29,7 +29,6 @@ private:
             curPos.y >= position.y && curPos.y <= position.y + area.height
         ) {
             mouse.isHovered = true;
-            std::cout << entity.name() << std::endl;
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) mouse.isLeftPressed   = true;
             if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) mouse.isRightPressed = true;
         }
