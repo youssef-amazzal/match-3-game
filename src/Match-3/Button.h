@@ -1,72 +1,31 @@
 #pragma once
+#include "Entity.h"
 #include "Label.h"
 #include "../core/InputModule.h"
 
-struct Button : public flecs::entity  {
+struct Button : public Entity<Button>  {
 
-    explicit Button(entity& container, const char* text, const int width, const RM::Scale scale, V_COLORS color = C_GREEN) : entity(container.world()) {
+    explicit Button(flecs::entity& container,UI_ELEMENTS type,  std::vector<VARIANTS> variants = {C_GREEN}) : Button(container, 1, type, std::move(variants)) {};
+    explicit Button(flecs::entity& container, const int expansion = 1, UI_ELEMENTS type = UI_BUTTON,  std::vector<VARIANTS> variants = {C_GREEN})
+        : Entity(container.world(), "Button") {
 
         this->is_a<TM::PPhysical>()
 
-                .set<RM::Type>({UI_BUTTON})
-                .set<RM::Variants>({{color}})
-                .set<RM::Expandable>({width, 1})
-                .set<RM::Scale>(scale)
+                .set<RM::Type>({type})
+                .set<RM::Variants>({std::move(variants)})
+                .set<RM::Expandable>({expansion, 1})
+                .set<RM::Scale>({3, 3})
 
                 .set<IM::Mouse>({false, false, false})
 
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
-                // .set<TM::Position, TM::Relative>({0, -100})
 
                 .set<TM::Depth>({3});
-
-        Label(container, text, 35, 5).setContainer(*this);
-
-        this->set_name(("Button" + std::to_string(this->id())).c_str());
     }
 
-    explicit Button(flecs::entity& container, UI_ELEMENTS type, std::vector<VARIANTS> variants, RM::Scale scale) : flecs::entity(container.world()) {
-        this->is_a<TM::PPhysical>()
-
-                .set<RM::Type>({type})
-                .set<RM::Variants>({std::move(variants)})
-                .set<RM::Scale>(scale)
-
-                .add<IM::Mouse>()
-
-                .add<TM::ContainedBy>(container)
-                .set<TM::Relative>({TM::Relative::Alignment::CENTER})
-                // .set<TM::Position, TM::Relative>({0, -100})
-
-                .set<TM::Depth>({3});
-
-        this->set_name(("Button" + std::to_string(this->id())).c_str());
-    }
-
-    explicit Button(flecs::entity& container, RM::Scale scale,  V_COLORS color = C_GREEN) : flecs::entity(container.world()) {
-        this->is_a<TM::PPhysical>()
-                .set<RM::Type>({UI_ELEMENTS::UI_BUTTON})
-                .set<RM::Variants>({{color}})
-                .set<RM::Scale>(scale)
-
-                .add<TM::ContainedBy>(container)
-                .set<TM::Relative>({TM::Relative::Alignment::CENTER})
-                // .set<TM::Position, TM::Relative>({0, -100})
-
-                .set<TM::Depth>({3});
-
-
-        this->set_name(("Button" + std::to_string(this->id())).c_str());
-    }
-
-    Button& setContainer(const flecs::entity& container) {
-        this->add<TM::ContainedBy>(container);
-        return *this;
-    }
-
-    Button& setColor(V_COLORS color) {
-        this->set<RM::Variants>({{color}});
+    Button& setLabel(const std::string& text, float fontSize = 40, float spacing = 5) {
+        Label(*this, text, fontSize, spacing);
         return *this;
     }
 

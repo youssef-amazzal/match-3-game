@@ -15,11 +15,11 @@ void TitleScene::enter() {
 
     auto subContainer = world.entity("subContainer").is_a<UI::HBox>();
 
-    newGameButton       = new Button(buttonContainer, "New Game", 7, {3, 3});
-    loadGameButton      = new Button(buttonContainer, "Load Game", 7, {3, 3});
-    leaderboardButton   = new Button(subContainer, UI_ICON_BUTTON,   {IC_LEADERBOARD}, {3, 3});
-    achievementsButton  = new Button(subContainer, UI_ICON_BUTTON,   {IC_ACHIEVEMENT}, {3, 3});
-    closeButton         = new Button(subContainer, "Close", 3, {3, 3}, C_RED);
+    newGameButton       = &(new Button(buttonContainer,7))->setLabel("New Game");
+    loadGameButton      = &(new Button(buttonContainer,7))->setLabel("Load Game");
+    leaderboardButton   = new Button(subContainer, UI_ICON_BUTTON,   {IC_LEADERBOARD});
+    achievementsButton  = new Button(subContainer, UI_ICON_BUTTON,   {IC_ACHIEVEMENT});
+    closeButton         = &(new Button(subContainer, 3))->setLabel("Close").setVariant({C_RED});
 
     subContainer.add<TM::ContainedBy>(buttonContainer);
 }

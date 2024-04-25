@@ -4,29 +4,25 @@
 #include "../core/RenderModule.h"
 
 
-struct Label : public flecs::entity  {
+struct Label : public Entity<Label>  {
 
-    explicit Label(flecs::entity& container, const char* text, float fontSize, float spacing) : flecs::entity(container.world()) {
-        Vector2 area = MeasureTextEx(GetFontDefault(), text, fontSize, spacing);
+    explicit Label(flecs::entity& container, std::string text, float fontSize, float spacing) : Entity(container.world(), "Label") {
 
         this->is_a<TM::PPhysical>()
                 .add<TM::ContainedBy>(container)
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
                 .set<TM::Depth>({3})
-                .set<TM::Area>({area.x, area.y})
                 .set<RM::Text>({text, fontSize, spacing});
-
-
-        this->set_name(("Label" + std::to_string(this->id())).c_str());
-    }
-
-    Label& setContainer(const flecs::entity& container) {
-        this->add<TM::ContainedBy>(container);
-        return *this;
     }
 
     Label& setColor(V_COLORS color) {
         this->set<RM::Variants>({{color}});
+        return *this;
+    }
+
+    Label& setText(std::string text) {
+        const auto txtComponent = this->get_mut<RM::Text>();
+        this->set<RM::Text>({text, txtComponent->fontSize, txtComponent->spacing});
         return *this;
     }
 

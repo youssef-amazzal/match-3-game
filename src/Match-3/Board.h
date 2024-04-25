@@ -1,4 +1,5 @@
 #pragma once
+#include "Entity.h"
 #include "../headers/Header.h"
 #include "../core/UiModule.h"
 #include "Slot.h"
@@ -6,12 +7,12 @@
 #include "LinkedList.h"
 
 
-class Board : public flecs::entity {
+class Board : public Entity<Board> {
 
 public:
     GemList mainList;
 
-    explicit Board(flecs::entity& container) : flecs::entity(container.world()) {
+    explicit Board(flecs::entity& container) : Entity(container.world(), "Board") {
 
         this->is_a<UI::HBox>()
                 .add<TM::ContainedBy>(container)
@@ -123,10 +124,5 @@ public:
     void shiftShapeLeft(V_SHAPES shape) {
         if (mainList.size() < 2) return;
         mainList.shiftShapeLeft(shape);
-    }
-
-private:
-    std::vector<flecs::entity>& getSlots() {
-        return this->get_mut<TM::Container::Content>()->items;
     }
 };

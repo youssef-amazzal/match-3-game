@@ -88,6 +88,8 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Scenes/Leaderboard.h
         src/Scenes/SaveMenu.cpp
         src/Scenes/SaveMenu.h
+        src/Match-3/Session.h
+        src/Match-3/Entity.h
 
 )
 #set(raylib_VERBOSE 1)

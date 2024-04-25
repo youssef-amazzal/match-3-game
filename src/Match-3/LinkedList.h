@@ -44,11 +44,11 @@ struct GemList {
         return count;
     }
 
-    Node* front() {
+    Node* front() const {
         return head;
     }
 
-    Node* back() {
+    Node* back() const {
         return tail;
     }
 
@@ -284,7 +284,7 @@ struct GemList {
         count--;
     }
 
-    void remove(int index) {
+    void remove(const int index) {
         // no elements
         if (count == 0) return;
 
@@ -388,13 +388,21 @@ struct GemList {
         count--;
     }
 
-    void shiftColorLeft(V_COLORS color) {
+    Gem& at(const int index) const {
+        Node* current = head;
+        for (int i = 0; i < index; i++) {
+            current = current->next;
+        }
+        return current->gem;
+    }
+
+    void shiftColorLeft(const V_COLORS color) {
         // get variant's head and tails
         Node*& colorHead = colorHeads[color];
         Node*& colorTail = colorTails[color];
 
         // store the initial variant head temporary to use it after looping
-        V_SHAPES tempShape;
+        V_SHAPES tempShape = SH_LONG_HEX;
         if (colorHead != nullptr) tempShape = colorHead->gem.getShape();
 
         Node* current = colorHead;
@@ -416,7 +424,7 @@ struct GemList {
         }
     }
 
-    void shiftShapeLeft(V_SHAPES shape) {
+    void shiftShapeLeft(const V_SHAPES shape) {
         // get variant's head and tails
         Node*& shapeHead = shapeHeads[shape];
         Node*& shapeTail = shapeTails[shape];

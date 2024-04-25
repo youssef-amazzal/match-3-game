@@ -1,11 +1,12 @@
 #pragma once
+#include "Entity.h"
 #include "../headers/Header.h"
 #include "../core/TransformModule.h"
 #include "../core/RenderModule.h"
 
-struct Background : public flecs::entity {
+struct Background : public Entity<Background> {
 
-    explicit Background(entity& container, V_COLORS color) : entity(container.world()) {
+    explicit Background(entity& container, V_COLORS color) : Entity(container.world(), "Background") {
 
         this->is_a<TM::PPhysical>()
             .add<TM::ContainedBy>(container)
@@ -22,8 +23,6 @@ struct Background : public flecs::entity {
                 .end = {0, 0},
                 .duration = 1.5,
             });
-
-        this->set_name(("Background" + std::to_string(this->id())).c_str());
     }
 
 };

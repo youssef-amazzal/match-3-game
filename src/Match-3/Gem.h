@@ -2,14 +2,9 @@
 #include "../headers/Header.h"
 #include "../core/MatchModule.h"
 
-struct Gem : public flecs::entity {
+struct Gem : public Entity<Gem> {
 
-    Gem(const flecs::world& world, const flecs::id id) : flecs::entity(world, id) {};
-    Gem(const flecs::world& world, const flecs::entity entity) : flecs::entity(world, entity) {}
-
-    Gem(const Gem& gem) = default;
-
-    Gem(const flecs::world& world, V_COLORS color, V_SHAPES shape) : flecs::entity(world) {
+    Gem(const flecs::world& world, V_COLORS color, V_SHAPES shape) : Entity(world, "Gem") {
         this->is_a<TM::PPhysical>()
 
                 .set<RM::Type>({UI_ELEMENTS::UI_GEM})
@@ -19,19 +14,8 @@ struct Gem : public flecs::entity {
                 .set<TM::Depth>({3})
                 .set<TM::Relative>({TM::Relative::Alignment::CENTER})
 
-                .set<MM::Match>({color, shape});
-
-        this->set_name(("Gem" + std::to_string(this->id())).c_str());
-    }
-
-
-    Gem(const flecs::entity& container, V_COLORS color, V_SHAPES shape) : Gem(container.world(), color, shape) {
-        this->add<TM::ContainedBy>(container);
-    }
-
-    Gem& setContainer(const flecs::entity& container) {
-        this->add<TM::ContainedBy>(container);
-        return *this;
+                .set<MM::Match>({color, shape})
+                .set<MM::Score>({5});
     }
 
     Gem& setColor(V_COLORS color) {
@@ -46,6 +30,11 @@ struct Gem : public flecs::entity {
         return *this;
     }
 
+    Gem& setScore(MM::Score score) {
+        this->set<MM::Score>(score);
+        return *this;
+    }
+
     V_COLORS getColor() {
         return this->get<MM::Match>()->color;
     }
@@ -54,9 +43,11 @@ struct Gem : public flecs::entity {
         return this->get<MM::Match>()->shape;
     }
 
-    bool operator==(const Gem& gem) {
-        return this->id() == gem.id();
+    int getScore() {
+        return this->get<MM::Score>()->score;
     }
+
+
 
     auto toString() {
         std::string color, shape;

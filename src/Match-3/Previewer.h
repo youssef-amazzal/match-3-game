@@ -2,14 +2,11 @@
 #include "../headers/Header.h"
 #include "../core/UiModule.h"
 #include "Slot.h"
-#include <queue>
-#include <list>
 
-struct Previewer : public flecs::entity {
+struct Previewer : public Entity<Previewer> {
 
-
-    explicit Previewer(flecs::entity& container, int nbPreviews, std::vector<V_COLORS> colors, std::vector<V_SHAPES> shapes)
-        : flecs::entity(container.world()), nbPreviews(nbPreviews), colors(colors), shapes(shapes)
+    explicit Previewer(flecs::entity& container, int nbPreviews, const std::vector<V_COLORS>& colors, const std::vector<V_SHAPES>& shapes)
+        : Entity(container.world(), "Previewer"), nbPreviews(nbPreviews), colors(colors), shapes(shapes)
     {
 
         this->is_a<UI::HBox>()
@@ -29,27 +26,10 @@ struct Previewer : public flecs::entity {
 
     }
 
-    std::vector<flecs::entity>& getSlots() {
-        return this->get_mut<TM::Container::Content>()->items;
-    }
-
     Gem getRandom() {
-        V_COLORS color = colors[rand() % colors.size()];
-        V_SHAPES shape = shapes[rand() % shapes.size()];
+        V_COLORS color = colors[GetRandomValue(0, 100) % colors.size()];
+        V_SHAPES shape = shapes[GetRandomValue(0, 100) % shapes.size()];
         return {world(), color, shape};
-    }
-
-    V_COLORS randomColor() {
-        return colors[rand() % colors.size()];
-    }
-
-    V_SHAPES randomShape() {
-        return shapes[rand() % shapes.size()];
-    }
-
-
-    void push() {
-
     }
 
     Gem pop() {
@@ -62,8 +42,7 @@ struct Previewer : public flecs::entity {
         }
 
         slots.back().with<TM::ContainedBy>([&]{
-            auto gem = getRandom();
-            previews.push_back(gem);
+            previews.push_back(getRandom());
         });
 
         return gem;
@@ -76,6 +55,4 @@ private:
     std::vector<Gem> previews;
     std::vector<V_COLORS> colors;
     std::vector<V_SHAPES> shapes;
-
-
 };
