@@ -7,7 +7,6 @@
 #include "../Match-3/Inventory.h"
 #include "../Match-3/Label.h"
 
-
 class GameScene : public Scene {
     Background* background = nullptr;
     Board*      board      = nullptr;
@@ -34,5 +33,22 @@ private:
     Scene* update() override;
 
     void exit() override;
+
+    json serialize() {
+        json j;
+
+        j["Board"] = board->serialize();
+        j["Previewer"] = previewer->serialize();
+        j["Score"] = score;
+
+        return j;
+    }
+
+    GameScene& deserialze(json j) {
+        board->deserialize(j["Board"]);
+        previewer->deserialize(j["Previewer"]);
+        score = j["Score"];
+        return *this;
+    }
 
 };

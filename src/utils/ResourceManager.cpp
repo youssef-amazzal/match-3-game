@@ -16,7 +16,7 @@ void RSC::loadTextures() {
 }
 
 void RSC::loadSpriteSheets() {
-    json parsed = FileManager::parseJson(SPRITESHEETS_DATA);
+    json parsed = FileManager::readJson(SPRITESHEETS_DATA);
 
     for (const auto& item : parsed) {
         auto spriteSheetPtr = std::make_shared<SpriteSheet>();
@@ -31,7 +31,7 @@ void RSC::loadSpriteSheets() {
 }
 
 void RSC::loadSprites() {
-    json parsedSheets = FileManager::parseJson(SPRITES_DATA);
+    json parsedSheets = FileManager::readJson(SPRITES_DATA);
 
     for (const auto& item: parsedSheets) {
         SPRITES_SHEETS sheetType = item.at("spritesheet").get<SPRITES_SHEETS>();

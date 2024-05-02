@@ -83,4 +83,19 @@ struct Gem : public Entity<Gem> {
         return std::string("(" + color + ", " + shape + ")");
     }
 
+    json serialize() {
+        return {
+                {"color", getColor()},
+                {"shape", getShape()},
+                {"score", getScore()}
+        };
+    }
+
+    Gem& deserialize(json j) {
+        setColor(j["color"]);
+        setShape(j["shape"]);
+        setScore({j["score"]});
+        return *this;
+    }
+
 };

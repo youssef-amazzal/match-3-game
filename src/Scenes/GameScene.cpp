@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "ModeScene.h"
+#include "../utils/FileManager.h"
 
 
 //================================//
@@ -19,6 +20,14 @@ void GameScene::enter() {
     scoreLabel = new Label(*sceneEntity,"0", 200, 10);
 
 
+    auto j = FileManager::readJson(GAMESAVE_PATH / "save_file.json");
+
+    if (j.is_null()) {
+        previewer->init();
+    } else {
+        std::cout << j.dump(4) << std::endl << std::endl;
+        deserialze(j);
+    }
 }
 
 //================================//
@@ -61,4 +70,7 @@ Scene* GameScene::update() {
 //================================//
 
 void GameScene::exit() {
+    auto j = serialize();
+    FileManager::writeJson(GAMESAVE_PATH / "save_file.json", j);
+    std::cout << j.dump(4) << std::endl << std::endl;
 }

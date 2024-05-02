@@ -26,4 +26,16 @@ struct Label : public Entity<Label>  {
         return *this;
     }
 
+    json serialize() {
+        json j;
+        j["text"] = this->get<RM::Text>()->text;
+        j["color"] = this->get<RM::Variants>()->values[0];
+        return j;
+    }
+
+    Label& deserialize(json j) {
+        this->setText(j["text"]);
+        this->setColor(j["color"]);
+        return *this;
+    }
 };

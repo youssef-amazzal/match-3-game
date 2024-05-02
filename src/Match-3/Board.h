@@ -131,4 +131,22 @@ public:
         if (mainList.size() < 2) return;
         mainList.shiftShapeLeft(shape);
     }
+
+    json serialize() {
+        json data = json::array();
+        auto current = mainList.front();
+        do {
+            data.push_back(current->gem.serialize());
+            current = current->next;
+        } while (current != mainList.front());
+        return data;
+    }
+
+    Board& deserialize(json j) {
+        for (auto& gem : j) {
+            push_back(Gem(world()).deserialize(gem));
+        }
+        return *this;
+    }
+
 };
