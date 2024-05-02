@@ -14,6 +14,7 @@ class GameScene : public Scene {
     Inventory*  inventory  = nullptr;
     Previewer*  previewer  = nullptr;
     Label*      scoreLabel = nullptr;
+    int score = 0;
 
 public:
     explicit GameScene(flecs::world& world) : Scene(world) {}

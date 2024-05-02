@@ -39,7 +39,7 @@ struct RenderModule {
     };
 
     struct Text {
-        const char* text;
+        std::string text;
         float fontSize;
         float spacing;
     };

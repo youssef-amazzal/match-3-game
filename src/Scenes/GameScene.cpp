@@ -16,7 +16,9 @@ void GameScene::enter() {
                     {C_RED, C_BLUE, C_YELLOW, C_GREEN},
                     {SH_DIAMOND, SH_TRIANGLE, SH_ROUND, SH_KITE}
                  );
-    scoreLabel = new Label(*sceneEntity,"999", 200, 10);
+    scoreLabel = new Label(*sceneEntity,"0", 200, 10);
+
+
 }
 
 //================================//
@@ -48,7 +50,8 @@ Scene* GameScene::update() {
         return new ModeScene(world);
     }
 
-    board->handleGemMatching();
+    score += board->handleGemMatching();
+    scoreLabel->setText(std::to_string(score));
 
     return nullptr;
 }

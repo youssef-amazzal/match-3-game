@@ -52,8 +52,8 @@ public:
         return *this;
     }
 
-    void handleGemMatching() {
-        if (mainList.size() < 3) return;
+    int handleGemMatching() {
+        if (mainList.size() < 3) return 0;
 
         auto current = mainList.front();
         auto colorCount = 1, shapeCount = 1;
@@ -106,6 +106,10 @@ public:
             shapeMatch = true;
         }
 
+        int score = 0;
+        for (auto index : toRemove) {
+            score += mainList.at(index).getScore();
+        }
         // remember that we need to remove the items in reverse order because
         // the indexes will change in each list when we remove an item
         for (auto it = toRemove.rbegin(); it != toRemove.rend(); ++it) {
@@ -114,6 +118,8 @@ public:
 
         if (colorMatch) std::cout << "Color Match" << std::endl;
         if (shapeMatch) std::cout << "Shape Match" << std::endl;
+
+        return score;
     }
 
     void shiftColorLeft(V_COLORS color) {

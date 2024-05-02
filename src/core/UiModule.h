@@ -8,10 +8,12 @@ struct UiModule {
     explicit UiModule(flecs::world& world);
 
     //====================================//
-    //              Components            //
+    //               Prefabs              //
     //====================================//
     struct HBox {};
     struct VBox {};
+
+
 };
 
 using UI = UiModule;

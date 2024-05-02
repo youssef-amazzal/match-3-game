@@ -4,7 +4,7 @@
 
 struct Gem : public Entity<Gem> {
 
-    Gem(const flecs::world& world, V_COLORS color, V_SHAPES shape) : Entity(world, "Gem") {
+    Gem(const flecs::world& world, V_COLORS color = C_GRAY, V_SHAPES shape = SH_LONG_HEX) : Entity(world, "Gem") {
         this->is_a<TM::PPhysical>()
 
                 .set<RM::Type>({UI_ELEMENTS::UI_GEM})
@@ -46,8 +46,6 @@ struct Gem : public Entity<Gem> {
     int getScore() {
         return this->get<MM::Score>()->score;
     }
-
-
 
     auto toString() {
         std::string color, shape;

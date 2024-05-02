@@ -10,6 +10,16 @@ RM::RenderModule(flecs::world& world) {
     world.observer<Type>("InitSprite")
             .event(flecs::OnSet).each(initSprite);
 
+    world.observer<RM::Text>("OnSet:Text")
+            .event(flecs::OnSet)
+            .each([](flecs::entity entity, RM::Text& text) {
+                auto area = entity.get_mut<TM::Area>();
+                Vector2 textArea = MeasureTextEx(GetFontDefault(), text.text.c_str(), text.fontSize, text.spacing);
+                area->width = textArea.x;
+                area->height = textArea.y;
+            });
+
+
     world.system<Type, Sprite, Variants, AM::Frame>("updateSourceRect")
             .term_at(4).second<AM::Animation>()
             .kind(flecs::PreStore).each(updateSourceRect);
@@ -57,9 +67,6 @@ void RM::initSprite(flecs::entity entity, Type& type) {
     animation->frames    = data.animations[state->state];
 
     sprite->sourceRect   = buildSourceRect(type, *sprite, *variants, *animation);
-
-    area->width  = sprite->sourceRect.width   * scale->width  * UI_SCALE;
-    area->height = sprite->sourceRect.height  * scale->height * UI_SCALE;
 }
 
 //====================================//
@@ -222,7 +229,7 @@ void RM::renderExpandableTiles(const flecs::entity entity, const Rectangle destR
 void RM::renderText(flecs::entity entity, Text& text, const TM::Position& position, const TM::Depth& depth) {
     DrawTextEx(
         GetFontDefault(),
-        text.text,
+        text.text.c_str(),
         {position.x, position.y},
         text.fontSize * UI_SCALE,
         text.spacing,
