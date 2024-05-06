@@ -1,8 +1,8 @@
 #include "TitleScene.h"
 
-#include "GameScene.h"
+#include "NewGame.h"
 #include "Leaderboard.h"
-#include "SaveMenu.h"
+#include "LoadGame.h"
 #include "../GameCycle.h"
 
 void TitleScene::enter() {
@@ -29,11 +29,11 @@ Scene* TitleScene::update() {
     world.progress();
 
     if (newGameButton->isClicked()) {
-        return new GameScene(world);
+        return new NewGame(world);
     }
 
     if (loadGameButton->isClicked()) {
-        return new SaveMenu(world);
+        return new LoadGame(world);
     }
 
     if (leaderboardButton->isClicked()) {

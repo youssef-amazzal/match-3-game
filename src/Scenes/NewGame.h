@@ -7,7 +7,7 @@
 #include "../Match-3/Inventory.h"
 #include "../Match-3/Label.h"
 
-class GameScene : public Scene {
+class NewGame : public Scene {
     Background* background = nullptr;
     Board*      board      = nullptr;
     Inventory*  inventory  = nullptr;
@@ -16,9 +16,9 @@ class GameScene : public Scene {
     int score = 0;
 
 public:
-    explicit GameScene(flecs::world& world) : Scene(world) {}
+    explicit NewGame(flecs::world& world) : Scene(world) {}
 
-    ~GameScene() override {
+    ~NewGame() override {
         delete background;
         delete board;
         delete inventory;
@@ -44,7 +44,7 @@ private:
         return j;
     }
 
-    GameScene& deserialze(json j) {
+    NewGame& deserialze(json j) {
         board->deserialize(j["Board"]);
         previewer->deserialize(j["Previewer"]);
         score = j["Score"];

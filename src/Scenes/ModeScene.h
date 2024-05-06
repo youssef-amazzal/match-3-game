@@ -2,7 +2,7 @@
 #include "../headers/Header.h"
 #include "Scene.h"
 
-class GameScene;
+class NewGame;
 
 class ModeScene : public Scene {
 public:

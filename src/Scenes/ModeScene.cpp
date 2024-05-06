@@ -1,5 +1,5 @@
 #include "ModeScene.h"
-#include "GameScene.h"
+#include "NewGame.h"
 #include "TitleScene.h"
 
 

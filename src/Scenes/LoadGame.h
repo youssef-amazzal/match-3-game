@@ -2,13 +2,13 @@
 #include "Scene.h"
 #include "../Match-3/Background.h"
 
-class SaveMenu : public Scene {
+class LoadGame : public Scene {
     Background* background = nullptr;
 
 public:
-    explicit SaveMenu(flecs::world& world) : Scene(world) {}
+    explicit LoadGame(flecs::world& world) : Scene(world) {}
 
-    ~SaveMenu() override {
+    ~LoadGame() override {
         delete background;
     }
 

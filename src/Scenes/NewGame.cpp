@@ -1,4 +1,4 @@
-#include "GameScene.h"
+#include "NewGame.h"
 #include "ModeScene.h"
 #include "../utils/FileManager.h"
 
@@ -7,7 +7,7 @@
 //             Enter              //
 //================================//
 
-void GameScene::enter() {
+void NewGame::enter() {
     background  = new Background(*sceneEntity, C_GREEN);
     board       = new Board(*sceneEntity);
     inventory   = new Inventory(*sceneEntity, 5);
@@ -34,7 +34,7 @@ void GameScene::enter() {
 //            Update              //
 //================================//
 
-Scene* GameScene::update() {
+Scene* NewGame::update() {
     if (IsKeyPressed(KEY_RIGHT)) {
         board->push_back(previewer->pop());
     }
@@ -69,7 +69,7 @@ Scene* GameScene::update() {
 //              Exit              //
 //================================//
 
-void GameScene::exit() {
+void NewGame::exit() {
     auto j = serialize();
     FileManager::writeJson(GAMESAVE_PATH / "save_file.json", j);
     std::cout << j.dump(4) << std::endl << std::endl;

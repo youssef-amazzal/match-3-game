@@ -1,12 +1,12 @@
-#include "SaveMenu.h"
+#include "LoadGame.h"
 
 #include "TitleScene.h"
 
-void SaveMenu::enter() {
+void LoadGame::enter() {
     background  = new Background(*sceneEntity, C_BLUE);
 }
 
-Scene* SaveMenu::update() {
+Scene* LoadGame::update() {
     world.progress();
     DrawText("LOAD GAME SCREEN", 20, 20, 40, RED);
 
@@ -16,6 +16,6 @@ Scene* SaveMenu::update() {
     return nullptr;
 }
 
-void SaveMenu::exit() {
+void LoadGame::exit() {
 
 }

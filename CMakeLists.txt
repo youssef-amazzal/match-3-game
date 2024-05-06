@@ -58,10 +58,10 @@ add_executable(${PROJECT_NAME} main.cpp
         src/GameCycle.h
         src/core/RenderModule.h
         src/Scenes/Scene.h
-        src/Scenes/GameScene.h
+        src/Scenes/NewGame.h
         src/Scenes/ModeScene.h
         src/Scenes/ModeScene.cpp
-        src/Scenes/GameScene.cpp
+        src/Scenes/NewGame.cpp
         src/core/TransformModule.h
         src/core/InputModule.h
         src/core/UiModule.h
@@ -86,8 +86,8 @@ add_executable(${PROJECT_NAME} main.cpp
         src/Scenes/TitleScene.h
         src/Scenes/Leaderboard.cpp
         src/Scenes/Leaderboard.h
-        src/Scenes/SaveMenu.cpp
-        src/Scenes/SaveMenu.h
+        src/Scenes/LoadGame.cpp
+        src/Scenes/LoadGame.h
         src/Match-3/Session.h
         src/Match-3/Entity.h
 

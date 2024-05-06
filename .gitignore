@@ -118,3 +118,9 @@ fabric.properties
 build/
 notes.md
 *.tiled*
+*.ttf
+assets/fonts/spritefont_outline.png
+assets/fonts/spritefont.png
+assets/fonts/font 8x7 accent.png
+assets/fonts/font 8x7 accent outline.png
+saves/save_file.json
