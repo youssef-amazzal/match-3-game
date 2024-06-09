@@ -7,7 +7,7 @@ struct Slot : public Entity<Slot> {
 
         this->is_a<TM::PPhysical>()
 
-            .set<RM::Type>({UI_ELEMENTS::UI_GEM_SLOT})
+            .set<RM::Sprite::Key>({UI_ELEMENTS::UI_GEM_SLOT})
             .set<RM::Variants>({{variant}})
             .set<RM::Scale>({1.5, 1.5})
 

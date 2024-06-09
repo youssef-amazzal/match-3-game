@@ -1,23 +1,14 @@
 #pragma once
-#include "Scene.h"
-#include "../Match-3/Background.h"
+#include "NewGame.h"
 
-class LoadGame : public Scene {
-    Background* background = nullptr;
+
+class LoadGame : public NewGame {
 
 public:
-    explicit LoadGame(flecs::world& world) : Scene(world) {}
-
-    ~LoadGame() override {
-        delete background;
-    }
+    explicit LoadGame(flecs::world& world) : NewGame(world) {}
 
 private:
 
     void enter() override;
-
-    Scene* update() override;
-
-    void exit() override;
 
 };

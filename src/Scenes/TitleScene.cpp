@@ -1,9 +1,9 @@
 #include "TitleScene.h"
-
 #include "NewGame.h"
 #include "Leaderboard.h"
 #include "LoadGame.h"
 #include "../GameCycle.h"
+#include "../utils/FileManager.h"
 
 void TitleScene::enter() {
     background  = new Background(*sceneEntity, C_BLUE);
@@ -22,6 +22,11 @@ void TitleScene::enter() {
     closeButton         = &(new Button(subContainer, 3))->setLabel("Close").setVariant({C_RED});
 
     subContainer.add<TM::ContainedBy>(buttonContainer);
+
+    auto j = FileManager::readJson(GAMESAVE_PATH / "save_file.json");
+    if (j.empty()) {
+        loadGameButton->desactivate();
+    }
 }
 
 Scene* TitleScene::update() {

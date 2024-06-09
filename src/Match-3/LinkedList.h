@@ -4,7 +4,6 @@
 
 struct GemList {
 
-
     struct Node {
         Gem gem;
         Node *next = nullptr;

@@ -11,7 +11,7 @@ struct Button : public Entity<Button>  {
 
         this->is_a<TM::PPhysical>()
 
-                .set<RM::Type>({type})
+                .set<RM::Sprite::Key>({type})
                 .set<RM::Variants>({std::move(variants)})
                 .set<RM::Expandable>({expansion, 1})
                 .set<RM::Scale>({3, 3})
@@ -29,15 +29,36 @@ struct Button : public Entity<Button>  {
         return *this;
     }
 
+    Button& setVariant(const std::vector<VARIANTS>& variants) {
+        this->set<RM::Variants>({variants});
+        return *this;
+    }
+
     bool isPressed() const {
-        return this->get_mut<IM::Mouse>()->isLeftPressed || this->get_mut<IM::Mouse>()->isRightPressed;
+        return this->has<IM::Mouse>() && this->get<IM::Mouse>()->isLeftPressed || this->get<IM::Mouse>()->isRightPressed;
     }
 
     bool isHovered() const {
-        return this->get_mut<IM::Mouse>()->isHovered;
+        return this->has<IM::Mouse>() && this->get<IM::Mouse>()->isHovered;
     }
 
     bool isClicked() const {
-        return this->get_mut<IM::Mouse>()->isLeftReleased || this->get_mut<IM::Mouse>()->isRightReleased;
+        return this->has<IM::Mouse>() && (this->get<IM::Mouse>()->isLeftReleased || this->get<IM::Mouse>()->isRightReleased);
+    }
+
+    Button& desactivate() {
+        this
+            ->remove<IM::Mouse>()
+            .set<AM::Animation::State>({ANIMATIONS::PRESS});
+
+        return *this;
+    }
+
+    Button& activate() {
+        this
+            ->set<IM::Mouse>({false, false, false})
+            .set<AM::Animation::State>({ANIMATIONS::IDLE});
+
+        return *this;
     }
 };

@@ -11,14 +11,14 @@ struct RenderModule {
     //              Components            //
     //====================================//
 
-    struct Type {
-        UI_ELEMENTS type    = UI_ELEMENTS::UI_INVALID;
-    };
-
     struct Sprite {
         Texture2D*  texture     = nullptr;
         Rectangle   sourceRect  = {0, 0, 0, 0};
         int originId = 0;
+
+        struct Key {
+            UI_ELEMENTS key    = UI_ELEMENTS::UI_INVALID;
+        };
     };
 
     struct Scale {
@@ -44,6 +44,17 @@ struct RenderModule {
         float spacing;
     };
 
+    struct Shape {
+        enum Type {
+            RECTANGLE,
+            CIRCLE
+        } type = RECTANGLE;
+    };
+
+    struct Opacity {
+        float value = 1.0f;
+    };
+
     struct Expandable {
         int horizontal;
         int vertical;
@@ -54,7 +65,7 @@ private:
     //             Observers              //
     //====================================//
 
-    static void initSprite(flecs::entity entity, Type& type);
+    static void initSprite(flecs::entity entity, Sprite::Key& type);
 
     //===================================//
     //             Systems               //
@@ -64,13 +75,13 @@ private:
     static void updateScale(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Area& area);
 
     static void updateSourceRect(
-        Type& type              , Sprite& sprite,
+        Sprite::Key& type              , Sprite& sprite,
         Variants& variants      , AM::Frame& animation
     );
 
     static void render(
         flecs::entity entity            ,
-        Type& type                      ,Sprite& sprite,
+        Sprite::Key& type                      ,Sprite& sprite,
         Scale& scale                    , TM::Area& area,
         const TM::Position& position    , const TM::Depth& depth
     );
@@ -85,7 +96,7 @@ private:
     //===================================//
 
     static Rectangle buildSourceRect(
-        const Type& type             , const Sprite& sprite,
+        const Sprite::Key& type             , const Sprite& sprite,
         const Variants& variants    , const AM::Frame& animation
     );
 

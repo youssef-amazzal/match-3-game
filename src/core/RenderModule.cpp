@@ -7,7 +7,7 @@ RM::RenderModule(flecs::world& world) {
     world.import<TransformModule>();
     world.import<AnimationModule>();
 
-    world.observer<Type>("InitSprite")
+    world.observer<Sprite::Key>("InitSprite")
             .event(flecs::OnSet).each(initSprite);
 
     world.observer<RM::Text>("OnSet:Text")
@@ -20,7 +20,7 @@ RM::RenderModule(flecs::world& world) {
             });
 
 
-    world.system<Type, Sprite, Variants, AM::Frame>("updateSourceRect")
+    world.system<Sprite::Key, Sprite, Variants, AM::Frame>("updateSourceRect")
             .term_at(4).second<AM::Animation>()
             .kind(flecs::PreStore).each(updateSourceRect);
 
@@ -28,7 +28,7 @@ RM::RenderModule(flecs::world& world) {
            .without<TM::Container::Fixed>()
            .kind(flecs::PreStore).each(updateScale);
 
-    world.system<Type, Sprite, Scale, TM::Area, const TM::Position, const TM::Depth>("Render")
+    world.system<Sprite::Key, Sprite, Scale, TM::Area, const TM::Position, const TM::Depth>("Render")
             .order_by<TM::Depth>([](flecs::entity_t e1, const TM::Depth* d1, flecs::entity_t e2, const TM::Depth* d2) {
                 return d1->value - d2->value; // Ascending
             })
@@ -47,10 +47,11 @@ RM::RenderModule(flecs::world& world) {
 //             Observers              //
 //====================================//
 
-void RM::initSprite(flecs::entity entity, Type& type) {
-    if (type.type == UI_ELEMENTS::UI_INVALID) return;
+void RM::initSprite(flecs::entity entity, Sprite::Key& type) {
+    if (type.key == UI_ELEMENTS::UI_INVALID) return;
 
     Scale*     scale        = entity.get_mut<Scale>();
+    Opacity*   opacity      = entity.get_mut<Opacity>();
     Sprite*    sprite       = entity.get_mut<Sprite>();
     Variants*  variants     = entity.get_mut<Variants>();
     AM::Frame* animation    = entity.get_mut<AM::Frame, AM::Animation>();
@@ -59,7 +60,7 @@ void RM::initSprite(flecs::entity entity, Type& type) {
     TM::Position* position  = entity.get_mut<TM::Position>();
     TM::Area*     area      = entity.get_mut<TM::Area>();
 
-    auto data           = RSC::getSpriteData(type.type);
+    auto data           = RSC::getSpriteData(type.key);
     SpriteSheet* sheet  = data.spriteSheet();
 
     sprite->texture      = &sheet->texture;
@@ -83,7 +84,7 @@ void RM::updateScale(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Are
 
     if (expandable) {
         // Expandable: Calculate the dimensions of each tile
-        auto data = RSC::getSpriteData(entity.get<Type>()->type);
+        auto data = RSC::getSpriteData(entity.get<Sprite::Key>()->key);
 
         float tileWidth  = area.width / data.width;
         float tileHeight = area.height / data.height;
@@ -98,14 +99,14 @@ void RM::updateScale(flecs::entity entity, Sprite& sprite, Scale& scale, TM::Are
     }
 }
 
-void RM::updateSourceRect(Type& type, Sprite& sprite, Variants& variants, AM::Frame& animation) {
-    if (type.type == UI_ELEMENTS::UI_INVALID) return;
+void RM::updateSourceRect(Sprite::Key& type, Sprite& sprite, Variants& variants, AM::Frame& animation) {
+    if (type.key == UI_ELEMENTS::UI_INVALID) return;
 
-    auto data = RSC::getSpriteData(type.type);
+    auto data = RSC::getSpriteData(type.key);
     sprite.sourceRect = buildSourceRect(type, sprite, variants, animation);
 }
 
-void RM::render(flecs::entity entity, Type& type, Sprite& sprite, Scale& scale, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
+void RM::render(flecs::entity entity, Sprite::Key& type, Sprite& sprite, Scale& scale, TM::Area& area, const TM::Position& position, const TM::Depth& depth) {
     float scaledTileWidth  = sprite.sourceRect.width      * scale.width      * UI_SCALE;
     float scaledTileHeight = sprite.sourceRect.height     * scale.height     * UI_SCALE;
 
@@ -195,7 +196,7 @@ void drawTiles(const SpriteData& data, const RM::Sprite& sprite, const RM::Expan
 
 void RM::renderExpandableTiles(const flecs::entity entity, const Rectangle destRect) {
     auto sprite = *entity.get<Sprite>();
-    auto type   = *entity.get<Type>();
+    auto type   = *entity.get<Sprite::Key>();
     auto position = *entity.get<TM::Position>();
 
 
@@ -205,7 +206,7 @@ void RM::renderExpandableTiles(const flecs::entity entity, const Rectangle destR
         return;
     }
 
-    SpriteData data = RSC::getSpriteData(type.type);
+    SpriteData data = RSC::getSpriteData(type.key);
 
     // Expandable: Calculate the dimensions of each tile
     float tileWidth  = sprite.sourceRect.width / data.width;
@@ -242,8 +243,8 @@ void RM::renderText(flecs::entity entity, Text& text, const TM::Position& positi
 //             Helpers               //
 //===================================//
 
-Rectangle RM::buildSourceRect(const Type& type, const Sprite& sprite, const Variants& variants, const AM::Frame& animation) {
-    auto data = RSC::getSpriteData(type.type);
+Rectangle RM::buildSourceRect(const Sprite::Key& type, const Sprite& sprite, const Variants& variants, const AM::Frame& animation) {
+    auto data = RSC::getSpriteData(type.key);
 
     int actualId = sprite.originId;
     for (auto& variant : variants.values) {

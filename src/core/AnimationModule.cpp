@@ -6,9 +6,9 @@
 AM::AnimationModule(flecs::world& world) {
     world.import<InputModule>();
     world.import<TransformModule>();
-    world.observer<RM::Type, Animation::State>("OnSet:AnimationState")
-            .event(flecs::OnSet).each([](flecs::entity entity, RM::Type& type, Animation::State& state) {
-                auto data = RSC::getSpriteData(type.type);
+    world.observer<RM::Sprite::Key, Animation::State>("OnSet:AnimationState")
+            .event(flecs::OnSet).each([](flecs::entity entity, RM::Sprite::Key& type, Animation::State& state) {
+                auto data = RSC::getSpriteData(type.key);
                 auto animation = entity.get_mut<Frame, Animation>();
 
                 // Grab the new set of frames and reset the current frame

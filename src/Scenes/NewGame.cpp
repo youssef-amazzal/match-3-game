@@ -19,15 +19,7 @@ void NewGame::enter() {
                  );
     scoreLabel = new Label(*sceneEntity,"0", 200, 10);
 
-
-    auto j = FileManager::readJson(GAMESAVE_PATH / "save_file.json");
-
-    if (j.is_null()) {
-        previewer->init();
-    } else {
-        std::cout << j.dump(4) << std::endl << std::endl;
-        deserialze(j);
-    }
+    previewer->init();
 }
 
 //================================//
@@ -72,5 +64,4 @@ Scene* NewGame::update() {
 void NewGame::exit() {
     auto j = serialize();
     FileManager::writeJson(GAMESAVE_PATH / "save_file.json", j);
-    std::cout << j.dump(4) << std::endl << std::endl;
 }

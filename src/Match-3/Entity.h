@@ -27,7 +27,7 @@ struct Entity : flecs::entity {
     }
 
     T& type(UI_ELEMENTS type) {
-        this->set<RM::Type>({type});
+        this->set<RM::Sprite::Key>({type});
         return static_cast<T&>(*this);
     }
 

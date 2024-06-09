@@ -1,21 +1,9 @@
 #include "LoadGame.h"
-
-#include "TitleScene.h"
+#include "../utils/FileManager.h"
 
 void LoadGame::enter() {
-    background  = new Background(*sceneEntity, C_BLUE);
-}
-
-Scene* LoadGame::update() {
-    world.progress();
-    DrawText("LOAD GAME SCREEN", 20, 20, 40, RED);
-
-    if (IsKeyPressed(KEY_SPACE)) {
-        return new TitleScene(world);
-    }
-    return nullptr;
-}
-
-void LoadGame::exit() {
-
+    NewGame::enter();
+    previewer->clear();
+    auto j = FileManager::readJson(GAMESAVE_PATH / "save_file.json");
+    deserialze(j);
 }

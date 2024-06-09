@@ -10,7 +10,7 @@ struct Background : public Entity<Background> {
 
         this->is_a<TM::PPhysical>()
             .add<TM::ContainedBy>(container)
-            .set<RM::Type>({UI_BG_PATTERN})
+            .set<RM::Sprite::Key>({UI_BG_PATTERN})
             .set<RM::Variants>({{color}})
             .add<RM::Repeat>()
 

@@ -7,7 +7,7 @@ struct Gem : public Entity<Gem> {
     Gem(const flecs::world& world, V_COLORS color = C_GRAY, V_SHAPES shape = SH_LONG_HEX) : Entity(world, "Gem") {
         this->is_a<TM::PPhysical>()
 
-                .set<RM::Type>({UI_ELEMENTS::UI_GEM})
+                .set<RM::Sprite::Key>({UI_ELEMENTS::UI_GEM})
                 .set<RM::Variants>({{color, shape}})
                 .set<RM::Scale>({2.4, 2.4})
 

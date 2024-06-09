@@ -8,6 +8,7 @@
 #include "../Match-3/Label.h"
 
 class NewGame : public Scene {
+protected:
     Background* background = nullptr;
     Board*      board      = nullptr;
     Inventory*  inventory  = nullptr;
@@ -26,7 +27,7 @@ public:
         delete scoreLabel;
     }
 
-private:
+protected:
 
     void enter() override;
 

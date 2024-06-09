@@ -26,6 +26,15 @@ struct Previewer : public Entity<Previewer> {
         for (int i = 0; i < nbPreviews; i++) {
             push();
         }
+        return *this;
+    }
+
+    Previewer& clear() {
+        // clear gems
+        for (auto& preview : previews) {
+            preview.destruct();
+        }
+        previews.clear();
 
         return *this;
     }
